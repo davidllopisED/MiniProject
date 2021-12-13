@@ -41,6 +41,7 @@ public class EspacioDialog extends javax.swing.JDialog {
         jComboBox1 = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        mnuExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mnuInsert = new javax.swing.JMenuItem();
 
@@ -98,6 +99,10 @@ public class EspacioDialog extends javax.swing.JDialog {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jMenu1.setText("File");
+
+        mnuExit.setText("Exit");
+        jMenu1.add(mnuExit);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -243,6 +248,7 @@ public class EspacioDialog extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel lblImage;
+    private javax.swing.JMenuItem mnuExit;
     private javax.swing.JMenuItem mnuInsert;
     // End of variables declaration//GEN-END:variables
 }
