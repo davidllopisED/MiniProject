@@ -100,6 +100,8 @@ public class InicioSesionForm extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
+        RegisterDialog regDialog = new RegisterDialog(this, true); //hacer la ventana insert true
+        regDialog.setVisible(true); //visible
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     /**
