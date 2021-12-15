@@ -29,17 +29,13 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="btnRegistrarse" min="-2" pref="110" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="chkAdmin" max="32767" attributes="0"/>
+                      <Component id="chkAdmin" pref="135" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="txtClave1" alignment="1" max="32767" attributes="0"/>
                   <Component id="txtUsuario" alignment="0" max="32767" attributes="0"/>
                   <Component id="lblUsuario" alignment="0" max="32767" attributes="0"/>
                   <Component id="lblCorreo" alignment="0" max="32767" attributes="0"/>
                   <Component id="txtCorreo" alignment="0" max="32767" attributes="0"/>
-                  <Component id="txtClaveRep" alignment="1" max="32767" attributes="0"/>
                   <Component id="lblError" alignment="1" max="32767" attributes="0"/>
-                  <Component id="lblClave" alignment="0" min="-2" pref="257" max="-2" attributes="0"/>
-                  <Component id="lblClaveRep" alignment="0" min="-2" pref="257" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
           </Group>
@@ -56,15 +52,7 @@
               <Component id="lblUsuario" min="-2" pref="28" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="txtUsuario" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="lblClave" min="-2" pref="26" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="txtClave1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-              <Component id="lblClaveRep" min="-2" pref="26" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="txtClaveRep" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Component id="lblError" min="-2" pref="22" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -91,18 +79,6 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtUsuario">
     </Component>
-    <Component class="javax.swing.JLabel" name="lblClave">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Contrase&#xf1;a"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblClaveRep">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Repite la contrase&#xf1;a"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtClaveRep">
-    </Component>
     <Component class="javax.swing.JLabel" name="lblError">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -113,8 +89,6 @@
         </Property>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtClave1">
     </Component>
     <Component class="javax.swing.JButton" name="btnRegistrarse">
       <Properties>
