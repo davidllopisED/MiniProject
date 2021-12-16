@@ -4,6 +4,8 @@
  */
 package spdvi;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author bryan
@@ -48,6 +50,11 @@ public class RegisterDialog extends javax.swing.JDialog {
         lblError.setToolTipText("");
 
         btnRegistrarse.setText("Registrarse");
+        btnRegistrarse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarseActionPerformed(evt);
+            }
+        });
 
         chkAdmin.setText("Solicitar Admin");
         chkAdmin.addActionListener(new java.awt.event.ActionListener() {
@@ -100,6 +107,13 @@ public class RegisterDialog extends javax.swing.JDialog {
     private void chkAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAdminActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkAdminActionPerformed
+
+    private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
+        // TODO add your handling code here:
+        if (txtCorreo.getText().length() == 0 || txtUsuario.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
+        }
+    }//GEN-LAST:event_btnRegistrarseActionPerformed
 
     /**
      * @param args the command line arguments

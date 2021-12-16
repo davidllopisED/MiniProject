@@ -4,6 +4,8 @@
  */
 package spdvi;
 
+import java.awt.event.WindowEvent;
+
 /**
  *
  * @author bryan
@@ -45,6 +47,11 @@ public class InicioSesionForm extends javax.swing.JFrame {
         lblError.setForeground(new java.awt.Color(255, 0, 0));
 
         btnIniciar.setText("Iniciar sesión");
+        btnIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarActionPerformed(evt);
+            }
+        });
 
         btnRegistrar.setText("Registrarse");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
@@ -103,6 +110,13 @@ public class InicioSesionForm extends javax.swing.JFrame {
         RegisterDialog regDialog = new RegisterDialog(this, true); //hacer la ventana insert true
         regDialog.setVisible(true); //visible
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
+        // TODO add your handling code here:
+        EspacioDialog spaceDialog = new EspacioDialog(this, true); //hacer la ventana insert true
+        spaceDialog.setVisible(true); //visible
+        this.dispose();
+    }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**
      * @param args the command line arguments
