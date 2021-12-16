@@ -12,7 +12,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,5 +96,29 @@ public class DataAccess {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, sqle);
         }
         return connection;
+    }
+    
+    public ArrayList<Users> getUsers() {
+        ArrayList<Users> users = new ArrayList<>();
+        try (Connection connection = getConnection()){
+            PreparedStatement selectStatement = 
+                    connection.prepareStatement(
+                            "SELECT * FROM dbo.usuaris"
+                    );
+            ResultSet resultSet = selectStatement.executeQuery();
+            while (resultSet.next()) {                
+                Users user = new Users(
+                        resultSet.getString("usuari"),
+                        resultSet.getString("email"),
+                        resultSet.getString("password"),
+                        resultSet.getBoolean("admin")
+                );
+                user.setId_registre(resultSet.getInt("id_registre"));
+                users.add(user);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return users;
     }
 }
