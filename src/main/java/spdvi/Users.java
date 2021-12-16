@@ -17,8 +17,7 @@ public class Users {
     private String password;
     private boolean admin;
 
-    public Users(int id_registre, String usuari, String email, String password, boolean admin) {
-        this.id_registre = id_registre;
+    public Users(String usuari, String email, String password, boolean admin) {
         this.usuari = usuari;
         this.email = email;
         this.password = password;
