@@ -113,9 +113,11 @@ public class InicioSesionForm extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // TODO add your handling code here:
-        EspacioDialog spaceDialog = new EspacioDialog(this, true); //hacer la ventana insert true
-        spaceDialog.setVisible(true); //visible
-        this.dispose();
+        //EspacioDialog spaceDialog = new EspacioDialog(this, true); //hacer la ventana insert true
+        //spaceDialog.setVisible(true); //visible
+        SpaceFrame frame2 = new SpaceFrame();
+        frame2.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     /**
