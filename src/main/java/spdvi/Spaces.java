@@ -10,13 +10,14 @@ package spdvi;
  * @author Alumne
  */
 public class Spaces {
-    private String nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis;
+    private String fk_id_registre, nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis;
     private int telefon;
 
     public Spaces() {
     }
 
-    public Spaces(String nom, String descripcions, String municipi, String adreca, String email, String web, String tipus, String modalitats, String gestor, String serveis, int telefon) {
+    public Spaces(String fk_id_registre, String nom, String descripcions, String municipi, String adreca, String email, String web, String tipus, String modalitats, String gestor, String serveis, int telefon) {
+        this.fk_id_registre = fk_id_registre;
         this.nom = nom;
         this.descripcions = descripcions;
         this.municipi = municipi;
@@ -28,6 +29,14 @@ public class Spaces {
         this.gestor = gestor;
         this.serveis = serveis;
         this.telefon = telefon;
+    }
+
+    public String getFk_id_registre() {
+        return fk_id_registre;
+    }
+
+    public void setFk_id_registre(String fk_id_registre) {
+        this.fk_id_registre = fk_id_registre;
     }
 
     public String getNom() {
@@ -120,6 +129,6 @@ public class Spaces {
 
     @Override
     public String toString() {
-        return "Spaces{" + "nom=" + nom + ", descripcions=" + descripcions + ", municipi=" + municipi + ", adreca=" + adreca + ", email=" + email + ", web=" + web + ", tipus=" + tipus + ", modalitats=" + modalitats + ", gestor=" + gestor + ", serveis=" + serveis + ", telefon=" + telefon + '}';
+        return "Spaces{" + "fk_id_registre=" + fk_id_registre + ", nom=" + nom + ", descripcions=" + descripcions + ", municipi=" + municipi + ", adreca=" + adreca + ", email=" + email + ", web=" + web + ", tipus=" + tipus + ", modalitats=" + modalitats + ", gestor=" + gestor + ", serveis=" + serveis + ", telefon=" + telefon + '}';
     }
 }
