@@ -5,6 +5,7 @@
 package spdvi;
 
 import java.awt.event.WindowEvent;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,6 +58,12 @@ public class InicioSesionForm extends javax.swing.JFrame {
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarActionPerformed(evt);
+            }
+        });
+
+        pwdPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pwdPasswordActionPerformed(evt);
             }
         });
 
@@ -115,10 +122,19 @@ public class InicioSesionForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         //EspacioDialog spaceDialog = new EspacioDialog(this, true); //hacer la ventana insert true
         //spaceDialog.setVisible(true); //visible
+        if (txtUsuario.getText().length() == 0 || pwdPassword.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
+        }
+        else {
         SpaceFrame frame2 = new SpaceFrame();
         frame2.setVisible(true);
         this.setVisible(false);
+        }
     }//GEN-LAST:event_btnIniciarActionPerformed
+
+    private void pwdPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwdPasswordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pwdPasswordActionPerformed
 
     /**
      * @param args the command line arguments
