@@ -4,6 +4,7 @@
  */
 package spdvi;
 
+import java.util.Random;
 import javax.swing.JOptionPane;
 
 /**
@@ -119,9 +120,20 @@ public class RegisterDialog extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, "El usuario que intenta introducir ya existe, intente de nuevo.");
             }
             else {
-                u.setEmail(txtCorreo.getText());
-                u.setUsuari(txtUsuario.getText());
-                u.setAdmin(chkAdmin.isSelected());
+                Random rd = new Random(9);
+                String password = rd.toString();
+                password = dataAccess.convertirSHA256(password);
+                Users newUser = new Users(
+                    txtUsuario.getText(),
+                    txtCorreo.getText(),
+                    password,
+                    chkAdmin.isSelected()
+                );
+                /*int newUserId = dataAccess.insertUser(newUser);
+                if (newUserId > 0) {
+                    newUser.setId_registre(newUserId);
+                }*/
+                
                 // TODO: Hacer que lo inserte en la base de datos...
             }
         }
