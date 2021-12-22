@@ -126,7 +126,7 @@ public class DataAccess {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "INSERT INTO dbo.usuaris (usuari, email, password, admin)" 
-            + "VALUES (?,?,?,?))"
+            + "VALUES (?,?,?,?)"
             );
             insertStatement.setString(1, newUser.getUsuari());
             insertStatement.setString(2, newUser.getEmail());
@@ -137,7 +137,7 @@ public class DataAccess {
             
             if (result > 0) {
                 PreparedStatement selectStatetement = connection.prepareStatement(
-                        "SEKECT MAX(id) AS newId FROM dbo.usuaris"
+                        "SELECT MAX(id_registre) AS newId FROM dbo.usuaris"
                 );
                 ResultSet resultSet = selectStatetement.executeQuery();
                 if (!resultSet.next()) {
