@@ -110,8 +110,20 @@ public class RegisterDialog extends javax.swing.JDialog {
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         // TODO add your handling code here:
+        DataAccess dataAccess = new DataAccess();
         if (txtCorreo.getText().length() == 0 || txtUsuario.getText().length() == 0) {
             JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
+        }
+        for(Users u: dataAccess.getUsers()) {
+            if(u.getUsuari().equals(txtUsuario)) {
+                JOptionPane.showMessageDialog(this, "El usuario que intenta introducir ya existe, intente de nuevo.");
+            }
+            else {
+                u.setEmail(txtCorreo.getText());
+                u.setUsuari(txtUsuario.getText());
+                u.setAdmin(chkAdmin.isSelected());
+                // TODO: Hacer que lo inserte en la base de datos...
+            }
         }
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
