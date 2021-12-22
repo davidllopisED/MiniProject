@@ -115,7 +115,7 @@ public class RegisterDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
         }
         for(Users u: dataAccess.getUsers()) {
-            if(u.getUsuari().equals(txtUsuario)) {
+            if(u.getUsuari().equals(txtUsuario.getText())) {
                 JOptionPane.showMessageDialog(this, "El usuario que intenta introducir ya existe, intente de nuevo.");
             }
             else {
