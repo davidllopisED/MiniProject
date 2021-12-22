@@ -119,6 +119,7 @@ public class RegisterDialog extends javax.swing.JDialog {
             if(u.getUsuari().equals(txtUsuario.getText())) {
                 JOptionPane.showMessageDialog(this, "El usuario que intenta introducir ya existe, intente de nuevo.");
             }
+            if(u.getEmail().equals(txtCorreo.getText())) JOptionPane.showMessageDialog(this, "El Correo electronico que intenta introducir ya existe, intente de nuevo.");
             else {
                 Random rd = new Random(9);
                 String password = rd.toString();
