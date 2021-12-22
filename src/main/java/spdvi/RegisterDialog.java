@@ -129,6 +129,7 @@ public class RegisterDialog extends javax.swing.JDialog {
                     password,
                     chkAdmin.isSelected()
                 );
+                dataAccess.insertUser(newUser);
                 /*int newUserId = dataAccess.insertUser(newUser);
                 if (newUserId > 0) {
                     newUser.setId_registre(newUserId);
