@@ -5,6 +5,7 @@
  */
 package spdvi;
 
+import spdvi.POJO.Users;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -52,7 +53,7 @@ public class DataAccess {
 	return sb.toString();
     }
     
-    private ImageIcon resizeImageIcon(BufferedImage originalImage, int desiredWidth, int desiredHeight) {
+    public ImageIcon resizeImageIcon(BufferedImage originalImage, int desiredWidth, int desiredHeight) {
         // Iniciamos las 2 variables de anchura y altura de la imagen nuevas
         int newHeight = 0;
         int newWidth = 0;
@@ -77,7 +78,7 @@ public class DataAccess {
         return imageIcon;
     }
     
-    private Connection getConnection() {
+    public Connection getConnection() {
         Connection connection = null;
         Properties properties = new Properties();
         try {
