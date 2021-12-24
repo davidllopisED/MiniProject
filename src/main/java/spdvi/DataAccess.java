@@ -121,4 +121,34 @@ public class DataAccess {
         }
     return users;
     }
+    
+    public int insertUser(Users newUser) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "INSERT INTO dbo.usuaris (usuari, email, password, admin)" 
+            + "VALUES (?,?,?,?)"
+            );
+            insertStatement.setString(1, newUser.getUsuari());
+            insertStatement.setString(2, newUser.getEmail());
+            insertStatement.setString(3, newUser.getPassword());
+            insertStatement.setBoolean(4, newUser.isAdmin());
+            
+            int result = insertStatement.executeUpdate();
+            
+            if (result > 0) {
+                PreparedStatement selectStatetement = connection.prepareStatement(
+                        "SELECT MAX(id_registre) AS newId FROM dbo.usuaris"
+                );
+                ResultSet resultSet = selectStatetement.executeQuery();
+                if (!resultSet.next()) {
+                    return 0;
+                }
+                return resultSet.getInt("newId");
+            }
+            return result;
+        }catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 }
