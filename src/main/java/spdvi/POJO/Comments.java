@@ -4,27 +4,25 @@
  */
 package spdvi.POJO;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
+import spdvi.DataAccess;
 
 /**
  *
  * @author bryan
  */
 public class Comments {
-    
-    int id;
+    DataAccess da;
+    int idComent;
     Date dateTime;
     int idUser;
+    int idRegistro;
     String user;
     String text;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Date getDateTime() {
         return dateTime;
@@ -46,8 +44,18 @@ public class Comments {
         return user;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUser() throws SQLException {
+      try (Connection connection = da.getConnection()){
+            PreparedStatement selectStatement = 
+                    connection.prepareStatement(
+                            "SELECT usuari FROM dbo.usuaris WHERE id_registre = ?"
+                    );
+            selectStatement.setInt(1, idRegistro);
+            ResultSet resultSet = selectStatement.executeQuery();
+            
+            user = resultSet.getString("useri");
+      }
+        
     }
 
     public String getText() {
@@ -57,21 +65,40 @@ public class Comments {
     public void setText(String text) {
         this.text = text;
     }
+
+    public int getIdComent() {
+        return idComent;
+    }
+
+    public void setIdComent(int idComent) {
+        this.idComent = idComent;
+    }
+
+    public int getIdRegistro() {
+        return idRegistro;
+    }
+
+    public void setIdRegistro(int idRegistro) {
+        this.idRegistro = idRegistro;
+    }
     
     
-    public Comments(int id, String text, Date dateTime,  int idUser) {
-        this.id = id;
+    
+    public Comments(int id, String text, Date dateTime, int idUser, int idRegistro) {
+        this.idComent = id;
         this.text = text;
         this.dateTime = dateTime;
         this.idUser = idUser;
+        this.idRegistro = idRegistro;
     }
     
-    public Comments(int id, String text, Date dateTime, int idUser, String user) {
-        this.id = id;
+    public Comments(int id, String text, Date dateTime, int idUser, String user, int idRegistro) {
+        this.idComent = id;
         this.text = text;
         this.dateTime = dateTime;
         this.idUser = idUser;
         this.user = user;
+        this.idRegistro = idRegistro;
     }
 
     @Override

@@ -227,10 +227,20 @@ public class SpaceFrame extends javax.swing.JFrame {
         );
 
         btnInsert.setText("Insertar");
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertActionPerformed(evt);
+            }
+        });
 
         cboElemento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnComent.setText("Comentar");
 
@@ -355,6 +365,18 @@ public class SpaceFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_btnCuentaActionPerformed
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        // TODO add your handling code here:
+        SpaceEditorDialog seDialog = new SpaceEditorDialog(this, true); //hacer la ventana insert true
+        seDialog.setVisible(true); //visible
+    }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        SpaceEditorDialog seDialog = new SpaceEditorDialog(this, true); //hacer la ventana insert true
+        seDialog.setVisible(true); //visible
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
