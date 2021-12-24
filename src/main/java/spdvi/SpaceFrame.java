@@ -82,6 +82,11 @@ public class SpaceFrame extends javax.swing.JFrame {
         btnSearch.setText("Buscar");
 
         btnCuenta.setText("Cuenta");
+        btnCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCuentaActionPerformed(evt);
+            }
+        });
 
         panSpace.setBorder(javax.swing.BorderFactory.createTitledBorder("Read Users"));
 
@@ -345,6 +350,11 @@ public class SpaceFrame extends javax.swing.JFrame {
     private void lstComentsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstComentsValueChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_lstComentsValueChanged
+
+    private void btnCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_btnCuentaActionPerformed
 
     /**
      * @param args the command line arguments
