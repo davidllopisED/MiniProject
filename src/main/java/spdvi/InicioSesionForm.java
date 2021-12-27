@@ -5,14 +5,16 @@
 package spdvi;
 
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import spdvi.POJO.Users;
 
 /**
  *
  * @author bryan
  */
 public class InicioSesionForm extends javax.swing.JFrame {
-
+    DataAccess da = new DataAccess();
     /**
      * Creates new form InicioSesion
      */
@@ -126,8 +128,6 @@ public class InicioSesionForm extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // TODO add your handling code here:
-        //EspacioDialog spaceDialog = new EspacioDialog(this, true); //hacer la ventana insert true
-        //spaceDialog.setVisible(true); //visible
         if (txtUsuario.getText().length() == 0 || pwdPassword.getText().length() == 0) {
             JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
         }
@@ -136,6 +136,20 @@ public class InicioSesionForm extends javax.swing.JFrame {
         frame2.setVisible(true);
         this.setVisible(false);
         }
+        
+        ArrayList<Users> Usuarios = da.getUsers();
+        int revisor = 0;
+        for (Users u: Usuarios) {
+            byte[] bytes = u.getPassword().getBytes();
+            String password = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+            if (u.getUsuari().equals(txtUsuario.getText()) && password.equals(pwdPassword.getToolTipText())) {
+                System.out.println("Todo bien");
+            } else {
+                System.out.println("No bien");
+            }
+        }
+        
+        
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void pwdPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwdPasswordActionPerformed

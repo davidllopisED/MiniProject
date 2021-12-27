@@ -1,11 +1,15 @@
 package spdvi;
 
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import spdvi.POJO.Spaces;
+
 /**
  *
  * @author bryan
  */
 public class SpaceFrame extends javax.swing.JFrame {
-
+    ArrayList<Spaces> spaces = new ArrayList<Spaces>();
     /**
      * Creates new form Prueba
      */
@@ -378,6 +382,15 @@ public class SpaceFrame extends javax.swing.JFrame {
         seDialog.setVisible(true); //visible
     }//GEN-LAST:event_btnEditarActionPerformed
 
+   public void UpdateSpaceListView() {
+        lstSpaces.setModel(null);
+        DefaultListModel<String> obraListModel = new DefaultListModel<String>();
+        for(Spaces s: spaces) {
+            obraListModel.addElement(s.getNom());
+        }
+        lstSpaces.setModel(obraListModel);      
+    }
+   
     /**
      * @param args the command line arguments
      */

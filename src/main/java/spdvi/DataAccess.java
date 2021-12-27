@@ -83,7 +83,7 @@ public class DataAccess {
         Properties properties = new Properties();
         try {
             // Get inputStream from the File: dataBaseProperties.properties  
-            properties.load(DataAccess.class.getClassLoader().getResourceAsStream("dataBaseProperties.properties"));
+            properties.load(DataAccess.class.getClassLoader().getResourceAsStream("propiedades.properties"));
             // Connection to DataBase with Properties.
             connection = 
                     DriverManager.getConnection(
@@ -91,10 +91,9 @@ public class DataAccess {
                     properties.getProperty("user"), 
                     properties.getProperty("password"));
             
-        } catch (IOException ex) {
+        } catch (IOException | SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException sqle) {
-            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, sqle);
+            System.out.println("No se ha conectado");
         }
         return connection;
     }
@@ -119,6 +118,7 @@ public class DataAccess {
             }
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Esta vacio");
         }
     return users;
     }
