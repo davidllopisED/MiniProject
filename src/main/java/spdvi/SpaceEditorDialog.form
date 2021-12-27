@@ -39,6 +39,7 @@
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="btnAgregar" pref="81" max="32767" attributes="0"/>
                                   <Component id="btnOpen" max="32767" attributes="0"/>
+                                  <Component id="btnRemove" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="lblImage" alignment="0" max="32767" attributes="0"/>
@@ -47,39 +48,36 @@
                           <Component id="lblWeb" alignment="0" min="-2" pref="41" max="-2" attributes="0"/>
                           <Component id="txtWeb" alignment="0" max="32767" attributes="0"/>
                       </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="lblSpaceName" pref="355" max="32767" attributes="0"/>
-                                  <Component id="txtSpaceName" max="32767" attributes="0"/>
-                                  <Component id="lblDescripcion" alignment="0" pref="355" max="32767" attributes="0"/>
-                                  <Component id="scpDescription" alignment="0" pref="355" max="32767" attributes="0"/>
-                                  <Component id="txtService" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="txtMunicipio" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtType" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="txtDirection" alignment="1" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblModalidad" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
-                                          <Component id="lblDirection" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
-                                          <Component id="lblMunicipio" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
-                                          <Component id="lblType" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
-                                          <Component id="lblService" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="0" pref="293" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="lblSpaceName" pref="355" max="32767" attributes="0"/>
+                              <Component id="txtSpaceName" max="32767" attributes="0"/>
+                              <Component id="lblDescripcion" alignment="0" pref="355" max="32767" attributes="0"/>
+                              <Component id="scpDescription" alignment="0" pref="355" max="32767" attributes="0"/>
+                              <Component id="txtService" alignment="1" max="32767" attributes="0"/>
+                              <Component id="txtMunicipio" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtType" alignment="1" max="32767" attributes="0"/>
+                              <Component id="txtDirection" alignment="1" max="32767" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="lblModalidad" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
+                                      <Component id="lblDirection" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
+                                      <Component id="lblMunicipio" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
+                                      <Component id="lblType" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
+                                      <Component id="lblService" alignment="0" min="-2" pref="62" max="-2" attributes="0"/>
                                   </Group>
+                                  <EmptySpace min="0" pref="293" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtModalidad" min="-2" pref="355" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="btnCancelar" min="-2" pref="157" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="btnAceptar" min="-2" pref="157" max="-2" attributes="0"/>
-                                  </Group>
+                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                              <Component id="txtModalidad" min="-2" pref="355" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Component id="btnAccept" min="-2" pref="101" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="btnCancel" min="-2" pref="98" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="chbMostrar" min="-2" pref="93" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -94,36 +92,6 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="lblSpaceName" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                      <Component id="txtSpaceName" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="lblDescripcion" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="scpDescription" min="-2" pref="74" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblMunicipio" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="txtMunicipio" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="lblDirection" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="txtDirection" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                      <Component id="lblType" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Component id="txtType" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblService" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="txtService" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblModalidad" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="txtModalidad" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="lblImage" min="-2" pref="223" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -149,10 +117,46 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="txtPhone" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnAceptar" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnCancel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnAccept" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chbMostrar" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="17" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lblSpaceName" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                      <Component id="txtSpaceName" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="lblDescripcion" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="scpDescription" min="-2" pref="74" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblMunicipio" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="txtMunicipio" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="lblDirection" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="txtDirection" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="btnRemove" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="lblType" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Component id="txtType" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblService" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="txtService" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblModalidad" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="txtModalidad" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -291,14 +295,30 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtPhone">
     </Component>
-    <Component class="javax.swing.JButton" name="btnAceptar">
+    <Component class="javax.swing.JButton" name="btnCancel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancelar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnCancelar">
+    <Component class="javax.swing.JButton" name="btnAccept">
       <Properties>
         <Property name="text" type="java.lang.String" value="Aceptar"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAcceptActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnRemove">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Quitar"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chbMostrar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Mostrar"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -45,7 +45,19 @@ public class RegisterDialog extends javax.swing.JDialog {
 
         lblCorreo.setText("Correo electrónico");
 
+        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCorreoActionPerformed(evt);
+            }
+        });
+
         lblUsuario.setText("Usuario");
+
+        txtUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUsuarioActionPerformed(evt);
+            }
+        });
 
         lblError.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         lblError.setForeground(new java.awt.Color(255, 0, 0));
@@ -141,6 +153,14 @@ public class RegisterDialog extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_btnRegistrarseActionPerformed
+
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCorreoActionPerformed
+
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsuarioActionPerformed
 
     /**
      * @param args the command line arguments

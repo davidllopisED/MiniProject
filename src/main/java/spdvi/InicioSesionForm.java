@@ -44,6 +44,12 @@ public class InicioSesionForm extends javax.swing.JFrame {
 
         lblClave.setText("Contraseña");
 
+        txtUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUsuarioActionPerformed(evt);
+            }
+        });
+
         lblError.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         lblError.setForeground(new java.awt.Color(255, 0, 0));
 
@@ -135,6 +141,10 @@ public class InicioSesionForm extends javax.swing.JFrame {
     private void pwdPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwdPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_pwdPasswordActionPerformed
+
+    private void txtUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsuarioActionPerformed
 
     /**
      * @param args the command line arguments
