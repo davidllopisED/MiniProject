@@ -14,7 +14,7 @@ import spdvi.POJO.Users;
  * @author bryan
  */
 public class InicioSesionForm extends javax.swing.JFrame {
-    DataAccess da = new DataAccess();
+    //DataAccess da = new DataAccess();
     /**
      * Creates new form InicioSesion
      */
@@ -122,32 +122,39 @@ public class InicioSesionForm extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
+        //this.setVisible(false);
         RegisterDialog regDialog = new RegisterDialog(this, true); //hacer la ventana insert true
         regDialog.setVisible(true); //visible
+        
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // TODO add your handling code here:
+        boolean access = false;
+        DataAccess dataAccess = new DataAccess();
         if (txtUsuario.getText().length() == 0 || pwdPassword.getText().length() == 0) {
             JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
+            
         }
-        else {
+        
+        
+        
+        ArrayList<Users> Usuarios = dataAccess.getUsers();
+        int revisor = 0;
+        for (Users u: Usuarios) {
+            String password = pwdPassword.getText();
+            password = dataAccess.convertirSHA256(password);
+            if(u.getUsuari().equals(txtUsuario.getText()) && u.getPassword().equals(password)) {
+                access = true;    
+            }
+        }
+        
+        if(access == true) {
         SpaceFrame frame2 = new SpaceFrame();
         frame2.setVisible(true);
         this.setVisible(false);
         }
         
-        ArrayList<Users> Usuarios = da.getUsers();
-        int revisor = 0;
-        for (Users u: Usuarios) {
-            byte[] bytes = u.getPassword().getBytes();
-            String password = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
-            if (u.getUsuari().equals(txtUsuario.getText()) && password.equals(pwdPassword.getToolTipText())) {
-                System.out.println("Todo bien");
-            } else {
-                System.out.println("No bien");
-            }
-        }
         
         
     }//GEN-LAST:event_btnIniciarActionPerformed
