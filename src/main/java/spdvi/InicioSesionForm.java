@@ -128,26 +128,32 @@ public class InicioSesionForm extends javax.swing.JFrame {
 
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // TODO add your handling code here:
+        SpaceFrame frame2 = new SpaceFrame();
+        
         if (txtUsuario.getText().length() == 0 || pwdPassword.getText().length() == 0) {
-            JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
+            //JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
+            lblError.setText("Alguno de los espacios esta vacio");
         }
         else {
-        SpaceFrame frame2 = new SpaceFrame();
-        frame2.setVisible(true);
-        this.setVisible(false);
-        }
-        
-        ArrayList<Users> Usuarios = da.getUsers();
-        int revisor = 0;
+            
+            ArrayList<Users> Usuarios = da.getUsers();
         for (Users u: Usuarios) {
-            byte[] bytes = u.getPassword().getBytes();
-            String password = new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
-            if (u.getUsuari().equals(txtUsuario.getText()) && password.equals(pwdPassword.getToolTipText())) {
+            String password = pwdPassword.getText();             
+            password = da.convertirSHA256(password);             
+            if(u.getUsuari().equals(txtUsuario.getText()) && u.getPassword().equals(password)) {
                 System.out.println("Todo bien");
+                frame2.setVisible(true);
+        this.setVisible(false);
             } else {
                 System.out.println("No bien");
+                lblError.setText("El usuario o contraseña no coinciden");
             }
+            
+            System.out.println("-------------------------" + u.getUsuari() + " =/ " + txtUsuario.getText() + "\n" + u.getPassword() + " == " + pwdPassword.getText()+ "\n-----------------");
         }
+        }
+        
+        
         
         
     }//GEN-LAST:event_btnIniciarActionPerformed
