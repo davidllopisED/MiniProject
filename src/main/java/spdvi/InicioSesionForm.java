@@ -133,10 +133,8 @@ public class InicioSesionForm extends javax.swing.JFrame {
         boolean access = false;
         DataAccess dataAccess = new DataAccess();
         if (txtUsuario.getText().length() == 0 || pwdPassword.getText().length() == 0) {
-            JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
-            
-        }
-        
+            lblError.setText("Alguno de los espacios esta vacío");
+        }       
         
         
         ArrayList<Users> Usuarios = dataAccess.getUsers();
@@ -144,8 +142,11 @@ public class InicioSesionForm extends javax.swing.JFrame {
         for (Users u: Usuarios) {
             String password = pwdPassword.getText();
             password = dataAccess.convertirSHA256(password);
+            
             if(u.getUsuari().equals(txtUsuario.getText()) && u.getPassword().equals(password)) {
                 access = true;    
+            } else {
+                lblError.setText("El usuario o contraseña no coinciden");
             }
         }
         
