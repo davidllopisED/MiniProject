@@ -14,6 +14,7 @@ import spdvi.POJO.Users;
  * @author bryan
  */
 public class InicioSesionForm extends javax.swing.JFrame {
+    public Users actualUser = new Users();
     //DataAccess da = new DataAccess();
     /**
      * Creates new form InicioSesion
@@ -133,24 +134,25 @@ public class InicioSesionForm extends javax.swing.JFrame {
         boolean access = false;
         DataAccess dataAccess = new DataAccess();
         if (txtUsuario.getText().length() == 0 || pwdPassword.getText().length() == 0) {
-            JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
-            
-        }
-        
+            lblError.setText("Alguno de los espacios esta vacío");
+        }       
         
         
         ArrayList<Users> Usuarios = dataAccess.getUsers();
-        int revisor = 0;
         for (Users u: Usuarios) {
             String password = pwdPassword.getText();
             password = dataAccess.convertirSHA256(password);
+            
             if(u.getUsuari().equals(txtUsuario.getText()) && u.getPassword().equals(password)) {
                 access = true;    
+                actualUser = u;
+            } else {
+                lblError.setText("El usuario o contraseña no coinciden");
             }
         }
         
         if(access == true) {
-        SpaceFrame frame2 = new SpaceFrame();
+        SpaceFrame frame2 = new SpaceFrame(actualUser);
         frame2.setVisible(true);
         this.setVisible(false);
         }

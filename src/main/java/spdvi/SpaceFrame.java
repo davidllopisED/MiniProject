@@ -3,19 +3,29 @@ package spdvi;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import spdvi.POJO.Spaces;
+import spdvi.POJO.Users;
 
 /**
  *
  * @author bryan
  */
 public class SpaceFrame extends javax.swing.JFrame {
+    Users actualUser = new Users();
     ArrayList<Spaces> spaces = new ArrayList<Spaces>();
-    /**
-     * Creates new form Prueba
-     */
-    public SpaceFrame() {
+    DataAccess da = new DataAccess();
+
+    public SpaceFrame(Users actualUser) {
+        
         initComponents();
+        
+        this.actualUser = actualUser;
+        
+        if(actualUser.isAdmin() == false) {
+            btnInsert.setEnabled(false);
+            btnEditar.setEnabled(false);
+        }
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -372,6 +382,7 @@ public class SpaceFrame extends javax.swing.JFrame {
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         // TODO add your handling code here:
+        
         SpaceEditorDialog seDialog = new SpaceEditorDialog(this, true); //hacer la ventana insert true
         seDialog.setVisible(true); //visible
     }//GEN-LAST:event_btnInsertActionPerformed
