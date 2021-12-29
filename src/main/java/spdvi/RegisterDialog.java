@@ -124,18 +124,26 @@ public class RegisterDialog extends javax.swing.JDialog {
 
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         // TODO add your handling code here:
+        boolean create = false;
         DataAccess dataAccess = new DataAccess();
         if (txtCorreo.getText().length() == 0 || txtUsuario.getText().length() == 0) {
             JOptionPane.showMessageDialog(this, "Error: Alguno de los espacios esta vacío");
+            create = false;
         }
         for(Users u: dataAccess.getUsers()) {
-            if(u.getUsuari().equals(txtUsuario.getText())) {
+            if(u.getUsuari().equals(txtUsuario.getText())){
                 JOptionPane.showMessageDialog(this, "El usuario que intenta introducir ya existe, intente de nuevo.");
+                create = false;
             }
-            if(u.getEmail().equals(txtCorreo.getText())) JOptionPane.showMessageDialog(this, "El Correo electronico que intenta introducir ya existe, intente de nuevo.");
-            else {
-                Random rd = new Random(9);
-                String password = rd.toString();
+            if(u.getEmail().equals(txtCorreo.getText())){
+                JOptionPane.showMessageDialog(this, "El Correo electronico que intenta introducir ya existe, intente de nuevo.");
+                create = false;
+            }
+            else create = true;
+        }
+        if(create == true) {
+                // Random rd = new Random(9);
+                String password = "CalaPilar";
                 password = dataAccess.convertirSHA256(password);
                 Users newUser = new Users(
                     txtUsuario.getText(),
@@ -144,14 +152,18 @@ public class RegisterDialog extends javax.swing.JDialog {
                     chkAdmin.isSelected()
                 );
                 dataAccess.insertUser(newUser);
+                create = true;
                 /*int newUserId = dataAccess.insertUser(newUser);
                 if (newUserId > 0) {
                     newUser.setId_registre(newUserId);
                 }*/
-                
-                // TODO: Hacer que lo inserte en la base de datos...
-            }
         }
+                // TODO: Hacer que lo inserte en la base de datos...
+            if(create == true) {
+                this.setVisible(false);
+                //InicioSesionForm inicioSesionForm = new InicioSesionForm();
+                //inicioSesionForm.setVisible(true);
+            }
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
     private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
