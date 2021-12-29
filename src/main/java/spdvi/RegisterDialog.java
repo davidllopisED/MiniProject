@@ -136,7 +136,7 @@ public class RegisterDialog extends javax.swing.JDialog {
                 lblError.setText("El usuario ya existe, intente de nuevo.");
                 create = false;
             }
-            if(u.getEmail().equals(txtCorreo.getText())){
+            else if(u.getEmail().equals(txtCorreo.getText())){
                 lblError.setText("El correo  ya existe, intente con otro.");
                 create = false;
             }
