@@ -9,6 +9,7 @@ import spdvi.POJO.Users;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -18,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -27,6 +29,32 @@ import javax.swing.ImageIcon;
  * @author Alumne
  */
 public class DataAccess {
+    
+    public String randomPassword() {
+        int length = 9;
+        byte[] array = new byte[256];
+        new Random().nextBytes(array);
+  
+        String randomString
+            = new String(array, Charset.forName("UTF-8"));
+        StringBuffer r = new StringBuffer();
+        
+        String  AlphaNumericString
+            = randomString
+                  .replaceAll("[^A-Za-z0-9]", "");
+        
+        for (int i = 0; i < AlphaNumericString.length(); i++) {
+            if (Character.isLetter(AlphaNumericString.charAt(i))
+                    && (length > 0) 
+                    || Character.isDigit(AlphaNumericString.charAt(i))
+                    && (length > 0)) {
+                r.append(AlphaNumericString.charAt(i));
+                length--;
+            }
+        }
+        return r.toString();
+    }
+   
 
     public String convertirSHA256(String password) {
         MessageDigest md = null;
