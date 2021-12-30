@@ -10,7 +10,7 @@ import spdvi.POJO.Users;
  * @author bryan
  */
 public class SpaceFrame extends javax.swing.JFrame {
-    Users actualUser = new Users();
+    private static Users actualUser = new Users();
     ArrayList<Spaces> spaces = new ArrayList<Spaces>();
     DataAccess da = new DataAccess();
 
@@ -377,7 +377,7 @@ public class SpaceFrame extends javax.swing.JFrame {
 
     private void btnCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaActionPerformed
         // TODO add your handling code here:
-
+        
     }//GEN-LAST:event_btnCuentaActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
@@ -433,7 +433,7 @@ public class SpaceFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SpaceFrame().setVisible(true);
+                new SpaceFrame(actualUser).setVisible(true);
             }
         });
     }
