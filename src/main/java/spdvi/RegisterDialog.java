@@ -4,6 +4,8 @@
  */
 package spdvi;
 
+import email.Mail;
+import java.nio.charset.Charset;
 import spdvi.POJO.Users;
 import java.util.Random;
 import javax.swing.JOptionPane;
@@ -143,8 +145,14 @@ public class RegisterDialog extends javax.swing.JDialog {
             else create = true;
         }
         if(create == true) {
-                // Random rd = new Random(9);
-                String password = "12345";
+                byte[] array = new byte[7];
+                new Random().nextBytes(array);
+                String password = new String(array, Charset.forName("UTF-8"));
+                String subject = "Contraseña de tu cuenta.";
+                String to = txtCorreo.getText();
+                String user = txtUsuario.getText();
+                String text = "La contraseña para entrar a tu cuenta " + user + " es: " + password;
+                
                 password = dataAccess.convertirSHA256(password);
                 Users newUser = new Users(
                     txtUsuario.getText(),
@@ -153,6 +161,8 @@ public class RegisterDialog extends javax.swing.JDialog {
                     chkAdmin.isSelected()
                 );
                 dataAccess.insertUser(newUser);
+                Mail mail = new Mail();
+                mail.enviaCorreo(to, subject, text);
                 this.setVisible(false);
             }
     }//GEN-LAST:event_btnRegistrarseActionPerformed
