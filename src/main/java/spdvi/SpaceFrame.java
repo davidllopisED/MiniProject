@@ -23,6 +23,7 @@ public class SpaceFrame extends javax.swing.JFrame {
         if(actualUser.isAdmin() == false) {
             btnInsert.setEnabled(false);
             btnEditar.setEnabled(false);
+            btnBorrar.setEnabled(false);
         }
     }
 
@@ -71,6 +72,7 @@ public class SpaceFrame extends javax.swing.JFrame {
         scpComent = new javax.swing.JScrollPane();
         lstComents = new javax.swing.JList<>();
         txtComent = new javax.swing.JTextField();
+        btnBorrar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnuExit = new javax.swing.JMenuItem();
@@ -90,8 +92,6 @@ public class SpaceFrame extends javax.swing.JFrame {
             }
         });
         scpSpace.setViewportView(lstSpaces);
-
-        txtSearch.setText("jTextField1");
 
         btnSearch.setText("Buscar");
 
@@ -233,7 +233,7 @@ public class SpaceFrame extends javax.swing.JFrame {
                 .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblModalidad)
                     .addComponent(lblPhone))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtModalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblPhoneData))
@@ -247,7 +247,7 @@ public class SpaceFrame extends javax.swing.JFrame {
             }
         });
 
-        cboElemento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboElemento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Municipio", "Direccion", "Tipo", "Servicio", "Modalidad" }));
 
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -269,6 +269,13 @@ public class SpaceFrame extends javax.swing.JFrame {
             }
         });
         scpComent.setViewportView(lstComents);
+
+        btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("File");
 
@@ -298,7 +305,8 @@ public class SpaceFrame extends javax.swing.JFrame {
                         .addComponent(btnCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnInsert, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
                         .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                        .addComponent(scpSpace, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)))
+                        .addComponent(scpSpace, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                        .addComponent(btnBorrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
@@ -330,24 +338,24 @@ public class SpaceFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(panSpace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addContainerGap())
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(scpSpace, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnInsert)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnEditar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBorrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnCuenta)
-                                .addGap(15, 15, 15))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(panSpace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnComent)
                             .addComponent(txtComent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30)
-                        .addComponent(scpComent)
-                        .addContainerGap())))
+                        .addComponent(scpComent)))
+                .addContainerGap())
         );
 
         pack();
@@ -392,6 +400,12 @@ public class SpaceFrame extends javax.swing.JFrame {
         SpaceEditorDialog seDialog = new SpaceEditorDialog(this, true); //hacer la ventana insert true
         seDialog.setVisible(true); //visible
     }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        // TODO add your handling code here:
+        DeleteSpaceDialog deleteDialog = new DeleteSpaceDialog(this, true); //hacer la ventana insert true
+        deleteDialog.setVisible(true); //visible
+    }//GEN-LAST:event_btnBorrarActionPerformed
 
    public void UpdateSpaceListView() {
         lstSpaces.setModel(null);
@@ -439,6 +453,7 @@ public class SpaceFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnComent;
     private javax.swing.JButton btnCuenta;
     private javax.swing.JButton btnEditar;
