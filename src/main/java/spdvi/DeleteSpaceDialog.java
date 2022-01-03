@@ -88,11 +88,11 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
        Spaces selectedObra = (Spaces) comboBox.getSelectedItem();
-       mainForm.obras.remove(selectedObra);
+       /*mainForm.obras.remove(selectedObra);
        mainForm.UpdateObraListView();
        mainForm.writeData();
        mainForm.lstObras.setSelectedIndex(0);
-       mainForm.lstObras.validate();
+       mainForm.lstObras.validate();*/
        UpdateObraComboModel();
     }//GEN-LAST:event_btnDeleteActionPerformed
     

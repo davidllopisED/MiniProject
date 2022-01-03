@@ -2,6 +2,7 @@ package spdvi;
 
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import spdvi.POJO.Spaces;
 import spdvi.POJO.Users;
 
@@ -11,13 +12,13 @@ import spdvi.POJO.Users;
  */
 public class SpaceFrame extends javax.swing.JFrame {
     private static Users actualUser = new Users();
-    ArrayList<Spaces> spaces = new ArrayList<Spaces>();
+    JList<String> lstSpacesName = new JList<>();
     DataAccess da = new DataAccess();
 
     public SpaceFrame(Users actualUser) {
         
         initComponents();
-        
+        scpSpaces.setViewportView(lstSpacesName);
         this.actualUser = actualUser;
         
         if(actualUser.isAdmin() == false) {
@@ -37,8 +38,7 @@ public class SpaceFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        scpSpace = new javax.swing.JScrollPane();
-        lstSpaces = new javax.swing.JList<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         btnCuenta = new javax.swing.JButton();
@@ -73,25 +73,13 @@ public class SpaceFrame extends javax.swing.JFrame {
         lstComents = new javax.swing.JList<>();
         txtComent = new javax.swing.JTextField();
         btnBorrar = new javax.swing.JButton();
+        scpSpaces = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        mnuExit = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        mnuInsert = new javax.swing.JMenuItem();
+        mniAllSpaces = new javax.swing.JMenuItem();
+        mniExit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        lstSpaces.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        lstSpaces.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstSpacesValueChanged(evt);
-            }
-        });
-        scpSpace.setViewportView(lstSpaces);
 
         btnSearch.setText("Buscar");
 
@@ -279,17 +267,18 @@ public class SpaceFrame extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
-        mnuExit.setText("Exit");
-        jMenu1.add(mnuExit);
+        mniAllSpaces.setText("All Spaces");
+        mniAllSpaces.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniAllSpacesActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mniAllSpaces);
+
+        mniExit.setText("Exit");
+        jMenu1.add(mniExit);
 
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-
-        mnuInsert.setText("Insertar");
-        jMenu2.add(mnuInsert);
-
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -299,14 +288,13 @@ public class SpaceFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cboElemento, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnInsert, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                        .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                        .addComponent(scpSpace, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                        .addComponent(btnBorrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cboElemento, 0, 165, Short.MAX_VALUE)
+                    .addComponent(btnCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnInsert, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                    .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                    .addComponent(btnBorrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                    .addComponent(scpSpaces))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
@@ -338,7 +326,7 @@ public class SpaceFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(scpSpace, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(scpSpaces, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnInsert)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -360,24 +348,6 @@ public class SpaceFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void lstSpacesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstSpacesValueChanged
-        /*ByteArrayOutputStream outputStream;
-        BufferedImage originalImage;
-
-        try {
-            BlockBlobClient blobClient = containerClient.getBlobClient(jList1.getSelectedValue()).getBlockBlobClient();
-            int dataSize = (int) blobClient.getProperties().getBlobSize();
-            outputStream = new ByteArrayOutputStream(dataSize);
-            blobClient.downloadStream(outputStream); //Thread Blocking
-            originalImage = ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray()));
-            ImageIcon icon = resizeImageIcon(originalImage, lblImage.getWidth(), lblImage.getHeight());
-            lblImage.setIcon(icon);
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
-        }
-        */
-    }//GEN-LAST:event_lstSpacesValueChanged
 
     private void lstComentsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstComentsValueChanged
         // TODO add your handling code here:
@@ -407,13 +377,20 @@ public class SpaceFrame extends javax.swing.JFrame {
         deleteDialog.setVisible(true); //visible
     }//GEN-LAST:event_btnBorrarActionPerformed
 
+    private void mniAllSpacesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniAllSpacesActionPerformed
+        // TODO add your handling code here:
+        UpdateSpaceListView();
+    }//GEN-LAST:event_mniAllSpacesActionPerformed
+
    public void UpdateSpaceListView() {
-        lstSpaces.setModel(null);
-        DefaultListModel<String> obraListModel = new DefaultListModel<String>();
-        for(Spaces s: spaces) {
-            obraListModel.addElement(s.getNom());
+        DataAccess da = new DataAccess();
+        DefaultListModel<String> defaultListModel = new DefaultListModel<>();
+
+        for (Spaces s: da.getSpaces()) {
+            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
         }
-        lstSpaces.setModel(obraListModel);      
+        
+        lstSpacesName.setModel(defaultListModel);      
     }
    
     /**
@@ -462,8 +439,8 @@ public class SpaceFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cboElemento;
     private javax.swing.JComboBox<String> cboImagen;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblDescription;
     private javax.swing.JLabel lblDirection;
     private javax.swing.JLabel lblEmail;
@@ -479,13 +456,12 @@ public class SpaceFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblWeb;
     private javax.swing.JLabel lblWebData;
     private javax.swing.JList<String> lstComents;
-    private javax.swing.JList<String> lstSpaces;
-    private javax.swing.JMenuItem mnuExit;
-    private javax.swing.JMenuItem mnuInsert;
+    private javax.swing.JMenuItem mniAllSpaces;
+    private javax.swing.JMenuItem mniExit;
     private javax.swing.JPanel panSpace;
     private javax.swing.JScrollPane scpComent;
     private javax.swing.JScrollPane scpDescription;
-    private javax.swing.JScrollPane scpSpace;
+    private javax.swing.JScrollPane scpSpaces;
     private javax.swing.JTextArea txaDescription;
     private javax.swing.JTextField txtComent;
     private javax.swing.JTextField txtDirection;
