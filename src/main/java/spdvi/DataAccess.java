@@ -159,7 +159,7 @@ public class DataAccess {
                 Spaces space = new Spaces(
                         resultSet.getString("registre"),
                         resultSet.getString("nom"),
-                        resultSet.getString("descriptions"),
+                        resultSet.getString("descripcions"),
                         resultSet.getString("municipi"),
                         resultSet.getString("adreca"),
                         resultSet.getString("email"),
