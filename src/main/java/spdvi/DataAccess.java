@@ -208,4 +208,42 @@ public class DataAccess {
         }
         return 0;
     }
+    
+    public int insertSpace(Spaces newSpace) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "INSERT INTO dbo.espai (registre, nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis, telefon)" 
+            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+            );
+            insertStatement.setString(1, "99");
+            insertStatement.setString(2, newSpace.getNom());
+            insertStatement.setString(3, newSpace.getDescripcions());
+            insertStatement.setString(4, newSpace.getMunicipi());
+            insertStatement.setString(5, newSpace.getAdreca());
+            insertStatement.setString(6, newSpace.getEmail());
+            insertStatement.setString(7, newSpace.getWeb());
+            insertStatement.setString(8, newSpace.getTipus());
+            insertStatement.setString(9, newSpace.getModalitats());
+            insertStatement.setString(10, newSpace.getGestor());
+            insertStatement.setString(11, newSpace.getServeis());
+            insertStatement.setInt(12, newSpace.getTelefon());
+            
+            int result = insertStatement.executeUpdate();
+            
+            if (result > 0) {
+                PreparedStatement selectStatetement = connection.prepareStatement(
+                        "SELECT MAX(registre) AS newId FROM dbo.espai"
+                );
+                ResultSet resultSet = selectStatetement.executeQuery();
+                if (!resultSet.next()) {
+                    return 0;
+                }
+                return resultSet.getInt("newId");
+            }
+            return result;
+        }catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 }
