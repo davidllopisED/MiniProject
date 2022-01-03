@@ -16,7 +16,6 @@ public class SpaceFrame extends javax.swing.JFrame {
     DataAccess da = new DataAccess();
 
     public SpaceFrame(Users actualUser) {
-        
         initComponents();
         scpSpaces.setViewportView(lstSpacesName);
         this.actualUser = actualUser;
@@ -26,6 +25,12 @@ public class SpaceFrame extends javax.swing.JFrame {
             btnEditar.setEnabled(false);
             btnBorrar.setEnabled(false);
         }
+        
+        lstSpacesName.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstSpacesNameValueChanged(evt);
+            }
+        });
     }
 
 
@@ -65,6 +70,8 @@ public class SpaceFrame extends javax.swing.JFrame {
         txtDirection = new javax.swing.JTextField();
         txtModalidad = new javax.swing.JTextField();
         txtService = new javax.swing.JTextField();
+        lblGestor = new javax.swing.JLabel();
+        txtGestor = new javax.swing.JTextField();
         btnInsert = new javax.swing.JButton();
         cboElemento = new javax.swing.JComboBox<>();
         btnEditar = new javax.swing.JButton();
@@ -110,12 +117,6 @@ public class SpaceFrame extends javax.swing.JFrame {
 
         lblPhone.setText("Teléfono");
 
-        lblEmailData.setText("jLabel7");
-
-        lblPhoneData.setText("jLabel7");
-
-        lblWebData.setText("jLabel7");
-
         lblDirection.setText("Direccion");
 
         lblType.setText("Tipo");
@@ -123,6 +124,8 @@ public class SpaceFrame extends javax.swing.JFrame {
         lblModalidad.setText("Modalidad");
 
         lblService.setText("Servicio");
+
+        lblGestor.setText("Gestor");
 
         javax.swing.GroupLayout panSpaceLayout = new javax.swing.GroupLayout(panSpace);
         panSpace.setLayout(panSpaceLayout);
@@ -133,7 +136,7 @@ public class SpaceFrame extends javax.swing.JFrame {
                     .addGroup(panSpaceLayout.createSequentialGroup()
                         .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panSpaceLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 18, Short.MAX_VALUE)
                                 .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panSpaceLayout.createSequentialGroup()
                                 .addContainerGap()
@@ -153,14 +156,16 @@ public class SpaceFrame extends javax.swing.JFrame {
                         .addComponent(lblPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(194, 194, 194)))
                 .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtGestor)
+                    .addComponent(txtModalidad, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtService, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtModalidad)
                     .addComponent(txtMunicipio)
                     .addComponent(txtType, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scpDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                    .addComponent(scpDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
                     .addComponent(txtDirection, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panSpaceLayout.createSequentialGroup()
                         .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblGestor, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblModalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblDirection, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSpaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -183,49 +188,54 @@ public class SpaceFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panSpaceLayout.createSequentialGroup()
                         .addComponent(lblSpaceName)
-                        .addGap(21, 21, 21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblDescription)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(scpDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblMunicipio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblDirection)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)))
-                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblType)
-                    .addComponent(lblEmail))
-                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panSpaceLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panSpaceLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblEmailData)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblService)
-                    .addComponent(lblWeb))
+                        .addComponent(txtDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblType)
+                        .addGap(4, 4, 4)))
                 .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panSpaceLayout.createSequentialGroup()
+                        .addComponent(lblEmail)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblEmailData))
+                    .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panSpaceLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(lblWeb)
+                        .addGap(4, 4, 4)
+                        .addComponent(lblWebData))
                     .addGroup(panSpaceLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtService, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblService)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtService, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panSpaceLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(lblWebData)))
+                        .addGap(20, 20, 20)
+                        .addComponent(lblPhone)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblPhoneData))
+                    .addGroup(panSpaceLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblModalidad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtModalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblGestor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblModalidad)
-                    .addComponent(lblPhone))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtModalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPhoneData))
-                .addContainerGap())
+                .addComponent(txtGestor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         btnInsert.setText("Insertar");
@@ -287,7 +297,7 @@ public class SpaceFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cboElemento, 0, 165, Short.MAX_VALUE)
                     .addComponent(btnCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -296,16 +306,16 @@ public class SpaceFrame extends javax.swing.JFrame {
                     .addComponent(btnBorrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
                     .addComponent(scpSpaces))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 459, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(panSpace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panSpace, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtComent, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                        .addComponent(txtComent, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnComent, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12))
@@ -316,33 +326,30 @@ public class SpaceFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSearch)
+                        .addComponent(cboElemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnComent)
+                        .addComponent(txtComent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scpComent)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearch)
-                            .addComponent(cboElemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(scpSpaces, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnInsert)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEditar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnBorrar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnCuenta)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(panSpace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnComent)
-                            .addComponent(txtComent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(30, 30, 30)
-                        .addComponent(scpComent)))
+                        .addComponent(scpSpaces, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnInsert)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEditar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnBorrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCuenta)
+                        .addGap(13, 13, 13))
+                    .addComponent(panSpace, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -391,6 +398,28 @@ public class SpaceFrame extends javax.swing.JFrame {
         }
         
         lstSpacesName.setModel(defaultListModel);      
+    }
+   
+    private void lstSpacesNameValueChanged(javax.swing.event.ListSelectionEvent evt) {
+        String selectedSpace = lstSpacesName.getSelectedValue();
+        String[] infoSpace = (selectedSpace.split(", "));
+        if (selectedSpace != null) {
+            for (Spaces s: da.getSpaces()) {
+                if(s.getNom().equals(infoSpace[0]) && s.getAdreca().equals(infoSpace[1])){
+                    lblSpaceName.setText(s.getNom());
+                    txaDescription.setText(s.getDescripcions());
+                    txtMunicipio.setText(s.getMunicipi());
+                    txtDirection.setText(s.getAdreca());
+                    txtType.setText(s.getTipus());
+                    txtService.setText(s.getServeis());
+                    txtModalidad.setText(s.getModalitats());
+                    txtGestor.setText(s.getGestor());
+                    lblEmailData.setText(s.getEmail());
+                    lblWebData.setText(s.getWeb());
+                    lblPhoneData.setText(String.valueOf(s.getTelefon()));
+                }
+        }          
+        }
     }
    
     /**
@@ -445,6 +474,7 @@ public class SpaceFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblDirection;
     private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblEmailData;
+    private javax.swing.JLabel lblGestor;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblModalidad;
     private javax.swing.JLabel lblMunicipio;
@@ -465,6 +495,7 @@ public class SpaceFrame extends javax.swing.JFrame {
     private javax.swing.JTextArea txaDescription;
     private javax.swing.JTextField txtComent;
     private javax.swing.JTextField txtDirection;
+    private javax.swing.JTextField txtGestor;
     private javax.swing.JTextField txtModalidad;
     private javax.swing.JTextField txtMunicipio;
     private javax.swing.JTextField txtSearch;
