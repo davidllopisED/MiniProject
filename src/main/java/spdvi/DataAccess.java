@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import spdvi.POJO.Spaces;
 
 /**
  *
@@ -144,6 +145,38 @@ public class DataAccess {
             System.out.println("Esta vacio");
         }
     return users;
+    }
+    
+    public ArrayList<Spaces> getSpaces() {
+        ArrayList<Spaces> spaces = new ArrayList<>();
+        try (Connection connection = getConnection()){
+            PreparedStatement selectStatement = 
+                    connection.prepareStatement(
+                            "SELECT * FROM dbo.espai"
+                    );
+            ResultSet resultSet = selectStatement.executeQuery();
+            while (resultSet.next()) {                
+                Spaces space = new Spaces(
+                        resultSet.getString("registre"),
+                        resultSet.getString("nom"),
+                        resultSet.getString("descriptions"),
+                        resultSet.getString("municipi"),
+                        resultSet.getString("adreca"),
+                        resultSet.getString("email"),
+                        resultSet.getString("web"),
+                        resultSet.getString("tipus"),
+                        resultSet.getString("modalitats"),
+                        resultSet.getString("gestor"),
+                        resultSet.getString("serveis"),
+                        resultSet.getInt("telefon")
+                );
+                spaces.add(space);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Esta vacio");
+        }
+    return spaces;
     }
     
     public int insertUser(Users newUser) {
