@@ -19,6 +19,7 @@ public class ProfileDialog extends javax.swing.JDialog {
     private final SpaceFrame mainSpaceForm;
     private boolean confirmDelete = false;
     DataAccess da = new DataAccess();
+    Users actualuser;
     private int id_registre;
     /**
      * Creates new form RegisterDialog
@@ -165,6 +166,7 @@ public class ProfileDialog extends javax.swing.JDialog {
         int registre = this.getId_registre();
         for (Users u: da.getUsers()) {
             if (u.getId_registre() == (registre)){
+                actualuser = u;
                 txtCorreo.setText(u.getEmail());
                 txtUsuario.setText(u.getUsuari());
             }
@@ -198,8 +200,32 @@ public class ProfileDialog extends javax.swing.JDialog {
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
-        if(!pwdClave.equals(pwdClaveRepeat)){
+        if(!pwdClave.getText().equals(pwdClaveRepeat.getText())){
             lblError.setText("Las contraseñas no coinciden");
+        } else if (txtUsuario.getText().isEmpty() || pwdClave.getText().isEmpty() || pwdClaveRepeat.getText().isEmpty()) {
+            lblError.setText("Hay espacios en blanco");
+        }
+        else {
+             try (Connection connection = da.getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "UPDATE dbo.usuaris set usuari = ?, password = ? WHERE id_registre = ?;");
+            
+            String password = da.convertirSHA256(pwdClave.getText());
+            
+            insertStatement.setString(1, txtUsuario.getText());
+            insertStatement.setString(2, password);
+            insertStatement.setInt(3, actualuser.getId_registre());
+            
+            int result = insertStatement.executeUpdate();
+            
+            if(result == 0) {
+                System.out.println("No se ha eliminado nada");
+            }
+            } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Ha sucedido un error");
+        }
+             this.setVisible(false); 
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
