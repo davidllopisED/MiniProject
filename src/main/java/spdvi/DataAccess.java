@@ -215,7 +215,7 @@ public class DataAccess {
             "INSERT INTO dbo.espai (registre, nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis, telefon)" 
             + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
             );
-            insertStatement.setString(1, "99");
+            insertStatement.setString(1, "98");
             insertStatement.setString(2, newSpace.getNom());
             insertStatement.setString(3, newSpace.getDescripcions());
             insertStatement.setString(4, newSpace.getMunicipi());

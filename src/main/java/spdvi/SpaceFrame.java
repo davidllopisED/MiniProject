@@ -11,7 +11,7 @@ import spdvi.POJO.Users;
  * @author bryan
  */
 public class SpaceFrame extends javax.swing.JFrame {
-    private static Users actualUser = new Users();
+    public static Users actualUser = new Users();
     JList<String> lstSpacesName = new JList<>();
     DataAccess da = new DataAccess();
 
@@ -367,7 +367,9 @@ public class SpaceFrame extends javax.swing.JFrame {
 
     private void btnCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaActionPerformed
         // TODO add your handling code here:
-        
+        ProfileDialog profileDialog = new ProfileDialog(this,true);
+        profileDialog.setId_registre(actualUser.getId_registre());
+        profileDialog.setVisible(true);
     }//GEN-LAST:event_btnCuentaActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
