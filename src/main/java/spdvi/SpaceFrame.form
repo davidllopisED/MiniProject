@@ -57,7 +57,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="cboElemento" alignment="0" pref="165" max="32767" attributes="0"/>
+                  <Component id="cmbElemento" alignment="0" pref="165" max="32767" attributes="0"/>
                   <Component id="btnCuenta" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnInsert" alignment="0" pref="165" max="32767" attributes="0"/>
                   <Component id="btnEditar" alignment="0" pref="165" max="32767" attributes="0"/>
@@ -97,7 +97,7 @@
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="txtSearch" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnSearch" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cboElemento" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cmbElemento" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="btnComent" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -133,6 +133,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCuenta">
       <Properties>
@@ -401,7 +404,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInsertActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JComboBox" name="cboElemento">
+    <Component class="javax.swing.JComboBox" name="cmbElemento">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="6">

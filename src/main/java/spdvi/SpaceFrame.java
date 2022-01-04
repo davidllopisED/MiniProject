@@ -11,7 +11,7 @@ import spdvi.POJO.Users;
  * @author bryan
  */
 public class SpaceFrame extends javax.swing.JFrame {
-    private static Users actualUser = new Users();
+    public static Users actualUser = new Users();
     JList<String> lstSpacesName = new JList<>();
     DataAccess da = new DataAccess();
 
@@ -73,7 +73,7 @@ public class SpaceFrame extends javax.swing.JFrame {
         lblGestor = new javax.swing.JLabel();
         txtGestor = new javax.swing.JTextField();
         btnInsert = new javax.swing.JButton();
-        cboElemento = new javax.swing.JComboBox<>();
+        cmbElemento = new javax.swing.JComboBox<>();
         btnEditar = new javax.swing.JButton();
         btnComent = new javax.swing.JButton();
         scpComent = new javax.swing.JScrollPane();
@@ -89,6 +89,11 @@ public class SpaceFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnSearch.setText("Buscar");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
         btnCuenta.setText("Cuenta");
         btnCuenta.addActionListener(new java.awt.event.ActionListener() {
@@ -161,7 +166,7 @@ public class SpaceFrame extends javax.swing.JFrame {
                     .addComponent(txtService, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtMunicipio)
                     .addComponent(txtType, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(scpDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                    .addComponent(scpDescription)
                     .addComponent(txtDirection, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panSpaceLayout.createSequentialGroup()
                         .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,7 +178,7 @@ public class SpaceFrame extends javax.swing.JFrame {
                             .addComponent(lblMunicipio, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblType, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblService, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 90, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panSpaceLayout.setVerticalGroup(
@@ -245,7 +250,7 @@ public class SpaceFrame extends javax.swing.JFrame {
             }
         });
 
-        cboElemento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Municipio", "Direccion", "Tipo", "Servicio", "Modalidad" }));
+        cmbElemento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Municipio", "Direccion", "Tipo", "Servicio", "Modalidad" }));
 
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -299,7 +304,7 @@ public class SpaceFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(cboElemento, 0, 165, Short.MAX_VALUE)
+                    .addComponent(cmbElemento, 0, 165, Short.MAX_VALUE)
                     .addComponent(btnCuenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnInsert, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
                     .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
@@ -331,7 +336,7 @@ public class SpaceFrame extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnSearch)
-                        .addComponent(cboElemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbElemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnComent)
                         .addComponent(txtComent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -362,7 +367,9 @@ public class SpaceFrame extends javax.swing.JFrame {
 
     private void btnCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuentaActionPerformed
         // TODO add your handling code here:
-        
+        ProfileDialog profileDialog = new ProfileDialog(this,true);
+        profileDialog.setId_registre(actualUser.getId_registre());
+        profileDialog.setVisible(true);
     }//GEN-LAST:event_btnCuentaActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
@@ -389,8 +396,47 @@ public class SpaceFrame extends javax.swing.JFrame {
         UpdateSpaceListView();
     }//GEN-LAST:event_mniAllSpacesActionPerformed
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        DefaultListModel<String> defaultListModel = new DefaultListModel<>();
+        String search = txtSearch.getText();
+        String elemento = cmbElemento.getSelectedItem().toString();
+
+        for (Spaces s: da.getSpaces()) {
+            
+            switch(elemento){
+            case "Nombre" -> {
+                if(s.getNom().equals(search))
+                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+            }
+            case "Municipio" -> {
+                if(s.getMunicipi().equals(search))
+                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+            }
+            case "Direccion" -> {
+                if(s.getAdreca().equals(search))
+                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+            }
+            case "Tipo" -> {
+                if(s.getTipus().equals(search))
+                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+            }
+            case "Servicio" -> {
+                if(s.getServeis().equals(search))
+                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+            }
+            case"Modalidad" -> {
+                if(s.getModalitats().equals(search))
+                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+            }
+        }
+                     
+        }
+        
+        lstSpacesName.setModel(defaultListModel); 
+    }//GEN-LAST:event_btnSearchActionPerformed
+
    public void UpdateSpaceListView() {
-        DataAccess da = new DataAccess();
         DefaultListModel<String> defaultListModel = new DefaultListModel<>();
 
         for (Spaces s: da.getSpaces()) {
@@ -402,8 +448,9 @@ public class SpaceFrame extends javax.swing.JFrame {
    
     private void lstSpacesNameValueChanged(javax.swing.event.ListSelectionEvent evt) {
         String selectedSpace = lstSpacesName.getSelectedValue();
-        String[] infoSpace = (selectedSpace.split(", "));
+        
         if (selectedSpace != null) {
+            String[] infoSpace = (selectedSpace.split(", "));
             for (Spaces s: da.getSpaces()) {
                 if(s.getNom().equals(infoSpace[0]) && s.getAdreca().equals(infoSpace[1])){
                     lblSpaceName.setText(s.getNom());
@@ -465,8 +512,8 @@ public class SpaceFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JComboBox<String> cboElemento;
     private javax.swing.JComboBox<String> cboImagen;
+    private javax.swing.JComboBox<String> cmbElemento;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;

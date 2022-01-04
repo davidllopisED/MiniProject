@@ -4,12 +4,22 @@
  */
 package spdvi;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import spdvi.POJO.Users;
+
 /**
  *
  * @author bryan
  */
 public class ProfileDialog extends javax.swing.JDialog {
-    private final InicioSesionForm mainInicio;
+    private final SpaceFrame mainSpaceForm;
+    private boolean confirmDelete = false;
+    DataAccess da = new DataAccess();
+    private int id_registre;
     /**
      * Creates new form RegisterDialog
      */
@@ -17,9 +27,26 @@ public class ProfileDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setTitle("Cuenta");
-        mainInicio = (InicioSesionForm) this.getParent();
+        mainSpaceForm = (SpaceFrame) this.getParent();
     }
 
+    public int getId_registre() {
+        return id_registre;
+    }
+
+    public void setId_registre(int id_registre) {
+        this.id_registre = id_registre;
+    }
+
+    public boolean isConfirmDelete() {
+        return confirmDelete;
+    }
+
+    public void setConfirmDelete(boolean confirmDelete) {
+        this.confirmDelete = confirmDelete;
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,12 +63,17 @@ public class ProfileDialog extends javax.swing.JDialog {
         lblClave = new javax.swing.JLabel();
         lblClaveRep = new javax.swing.JLabel();
         lblError = new javax.swing.JLabel();
-        btnRegistrarse = new javax.swing.JButton();
-        btnRegistrarse1 = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
         pwdClave = new javax.swing.JPasswordField();
         pwdClaveRepeat = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         lblCorreo.setText("Correo electrónico");
 
@@ -55,9 +87,19 @@ public class ProfileDialog extends javax.swing.JDialog {
         lblError.setForeground(new java.awt.Color(255, 0, 0));
         lblError.setToolTipText("");
 
-        btnRegistrarse.setText("Actualizar");
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
 
-        btnRegistrarse1.setText("Borrar");
+        btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,7 +109,7 @@ public class ProfileDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegistrarse1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -78,7 +120,7 @@ public class ProfileDialog extends javax.swing.JDialog {
                             .addComponent(lblError, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblClave, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
                                     .addComponent(lblClaveRep, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
                                     .addComponent(pwdClave)
@@ -103,20 +145,65 @@ public class ProfileDialog extends javax.swing.JDialog {
                 .addComponent(pwdClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblClaveRep, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pwdClaveRepeat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
+                .addGap(20, 20, 20)
                 .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegistrarse)
-                    .addComponent(btnRegistrarse1))
+                    .addComponent(btnActualizar)
+                    .addComponent(btnBorrar))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:    
+        txtCorreo.setEnabled(false);
+        int registre = this.getId_registre();
+        for (Users u: da.getUsers()) {
+            if (u.getId_registre() == (registre)){
+                txtCorreo.setText(u.getEmail());
+                txtUsuario.setText(u.getUsuari());
+            }
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        // TODO add your handling code here:
+        ConfirmDeleteDialog deleteDialog = new ConfirmDeleteDialog(this, true);
+        deleteDialog.setVisible(true);
+        
+        if (this.confirmDelete) {
+            try (Connection connection = da.getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "DELETE FROM dbo.usuaris WHERE id_registre = ?;");
+            
+            insertStatement.setInt(1, id_registre);
+            
+            int result = insertStatement.executeUpdate();
+            
+            if(result == 0) {
+                System.out.println("No se ha eliminado nada");
+            }
+            } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Ha sucedido un error");
+        }
+            System.exit(101);
+        }
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        // TODO add your handling code here:
+        if(!pwdClave.equals(pwdClaveRepeat)){
+            lblError.setText("Las contraseñas no coinciden");
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -161,8 +248,8 @@ public class ProfileDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnRegistrarse;
-    private javax.swing.JButton btnRegistrarse1;
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnBorrar;
     private javax.swing.JLabel lblClave;
     private javax.swing.JLabel lblClaveRep;
     private javax.swing.JLabel lblCorreo;
