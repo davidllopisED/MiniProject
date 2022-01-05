@@ -229,6 +229,25 @@ public class DataAccess {
         return 0;
     }
     
+    public int deleteSpace(String registre) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "DELETE FROM dbo.espai WHERE registre = ?;"
+            );
+
+            insertStatement.setString(1, registre);
+
+            int result = insertStatement.executeUpdate();
+
+            if(result == 0) {
+                System.out.println("No se ha eliminado nada");
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
     public int actualizarUser(String user, String Password, int id_registre) {
         try (Connection connection = getConnection()) {
         PreparedStatement updateStatement = connection.prepareStatement(

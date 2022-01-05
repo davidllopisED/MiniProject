@@ -6,6 +6,7 @@ package spdvi;
 
 import javax.swing.JComboBox;
 import POJO.Spaces;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -14,6 +15,8 @@ import POJO.Spaces;
 public class DeleteSpaceDialog extends javax.swing.JDialog {
     private final SpaceFrame spaceFrame;
     private JComboBox<Spaces> comboBox;
+    DataAccess da = new DataAccess();
+   
     /**
      * Creates new form DeleteObraDialog
      * 
@@ -58,19 +61,19 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addComponent(btnDelete)
-                .addGap(28, 28, 28))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -84,23 +87,20 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-       Spaces selectedObra = (Spaces) comboBox.getSelectedItem();
-       /*mainForm.obras.remove(selectedObra);
-       mainForm.UpdateObraListView();
-       mainForm.writeData();
-       mainForm.lstObras.setSelectedIndex(0);
-       mainForm.lstObras.validate();*/
+       Spaces selectedSpaces = (Spaces) comboBox.getSelectedItem();
+       da.deleteSpace(selectedSpaces.getFk_id_registre());
+       spaceFrame.UpdateSpaceListView();
        UpdateObraComboModel();
     }//GEN-LAST:event_btnDeleteActionPerformed
     
     
     private void UpdateObraComboModel() {
         
-        /*DefaultComboBoxModel<Obra> obraComboBoxModel = new DefaultComboBoxModel<Obra>();
-        for(Obra o: mainForm.obras) {
-            obraComboBoxModel.addElement(o);
+        DefaultComboBoxModel<Spaces> spacesComboBoxModel = new DefaultComboBoxModel<Spaces>();
+        for(Spaces s: da.getSpaces()) {
+            spacesComboBoxModel.addElement(s);
         }
-        comboBox.setModel(obraComboBoxModel);*/
+        comboBox.setModel(spacesComboBoxModel);
         
     }
     
