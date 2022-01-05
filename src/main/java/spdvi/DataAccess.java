@@ -210,6 +210,25 @@ public class DataAccess {
     }
     
     
+    public int deleteUser(int id_registre) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "DELETE FROM dbo.usuaris WHERE id_registre = ?;"
+            );
+
+            insertStatement.setInt(1, id_registre);
+
+            int result = insertStatement.executeUpdate();
+
+            if(result == 0) {
+                System.out.println("No se ha eliminado nada");
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
     public int actualizarUser(String user, String Password, int id_registre) {
         try (Connection connection = getConnection()) {
         PreparedStatement updateStatement = connection.prepareStatement(
@@ -218,8 +237,8 @@ public class DataAccess {
         int result = updateStatement.executeUpdate();
         
         if(result == 0) {
-                System.out.println("No se ha eliminado nada");
-            }
+            System.out.println("No se ha eliminado nada");
+        }
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
         }

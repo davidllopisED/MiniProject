@@ -179,21 +179,8 @@ public class ProfileDialog extends javax.swing.JDialog {
         deleteDialog.setVisible(true);
         
         if (this.confirmDelete) {
-            try (Connection connection = da.getConnection()) {
-            PreparedStatement insertStatement = connection.prepareStatement(
-            "DELETE FROM dbo.usuaris WHERE id_registre = ?;");
-            
-            insertStatement.setInt(1, id_registre);
-            
-            int result = insertStatement.executeUpdate();
-            
-            if(result == 0) {
-                System.out.println("No se ha eliminado nada");
-            }
-            } catch (SQLException ex) {
-            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Ha sucedido un error");
-        }
+            DataAccess dataAccess = new DataAccess();
+            dataAccess.deleteUser(actualuser.getId_registre());
             System.exit(101);
         }
     }//GEN-LAST:event_btnBorrarActionPerformed
