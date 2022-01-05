@@ -143,6 +143,11 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         btnRemove.setText("Quitar");
 
         chbMostrar.setText("Mostrar");
+        chbMostrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chbMostrarActionPerformed(evt);
+            }
+        });
 
         lblGestor.setText("Gestor");
 
@@ -356,7 +361,12 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
         //Si se hace algun insert o alguna accion durante la edicion y no se ha dado aceptar sino cancelar, se puede hacer un rollback y quitar la ventana
+        this.setVisible(false);
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void chbMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbMostrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chbMostrarActionPerformed
 
     /**
      * @param args the command line arguments

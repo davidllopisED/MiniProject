@@ -129,6 +129,6 @@ public class Spaces {
 
     @Override
     public String toString() {
-        return "Spaces{" + "fk_id_registre=" + fk_id_registre + ", nom=" + nom + ", descripcions=" + descripcions + ", municipi=" + municipi + ", adreca=" + adreca + ", email=" + email + ", web=" + web + ", tipus=" + tipus + ", modalitats=" + modalitats + ", gestor=" + gestor + ", serveis=" + serveis + ", telefon=" + telefon + '}';
+        return fk_id_registre + ": \"" + nom + "\". " + municipi + ", " + adreca;
     }
 }
