@@ -126,7 +126,7 @@ public class ConfirmDeleteDialog extends javax.swing.JDialog {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ConfirmDeleteDialog dialog = new ConfirmDeleteDialog(new javax.swing.JFrame(), true);
+                ConfirmDeleteDialog dialog = new ConfirmDeleteDialog(new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

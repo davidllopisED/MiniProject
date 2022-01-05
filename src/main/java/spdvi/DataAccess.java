@@ -212,10 +212,10 @@ public class DataAccess {
     public int insertSpace(Spaces newSpace) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
-            "INSERT INTO dbo.espai (registre, nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis, telefon)" 
-            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+            "INSERT INTO dbo.espai (nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis, telefon)" 
+            + "VALUES (?,?,?,?,?,?,?,?,?,?,?)"
             );
-            insertStatement.setString(1, "98");
+            //insertStatement.setString(1, "98");
             insertStatement.setString(2, newSpace.getNom());
             insertStatement.setString(3, newSpace.getDescripcions());
             insertStatement.setString(4, newSpace.getMunicipi());
