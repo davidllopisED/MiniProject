@@ -3,8 +3,8 @@ package spdvi;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import spdvi.POJO.Spaces;
-import spdvi.POJO.Users;
+import POJO.Spaces;
+import POJO.Users;
 
 /**
  *

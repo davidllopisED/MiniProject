@@ -5,7 +5,7 @@
 package spdvi;
 
 import javax.swing.JComboBox;
-import spdvi.POJO.Spaces;
+import POJO.Spaces;
 
 /**
  *

@@ -5,7 +5,7 @@
 package spdvi;
 
 import java.util.ArrayList;
-import spdvi.POJO.Users;
+import POJO.Users;
 
 /**
  *

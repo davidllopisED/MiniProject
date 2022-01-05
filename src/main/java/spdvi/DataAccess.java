@@ -5,7 +5,7 @@
  */
 package spdvi;
 
-import spdvi.POJO.Users;
+import POJO.Users;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import spdvi.POJO.Spaces;
+import POJO.Spaces;
 
 /**
  *

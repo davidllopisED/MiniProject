@@ -5,7 +5,7 @@
 package spdvi;
 
 import email.Mail;
-import spdvi.POJO.Users;
+import POJO.Users;
 
 
 /**
