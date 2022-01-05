@@ -4,11 +4,8 @@
  */
 package spdvi;
 
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
-import javax.swing.JList;
-import spdvi.POJO.Spaces;
+import POJO.Spaces;
 
 /**
  *

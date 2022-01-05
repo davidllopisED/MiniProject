@@ -4,10 +4,8 @@
  */
 package spdvi;
 
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import spdvi.POJO.Users;
+import POJO.Users;
 
 /**
  *

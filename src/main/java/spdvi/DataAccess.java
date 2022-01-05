@@ -5,7 +5,7 @@
  */
 package spdvi;
 
-import spdvi.POJO.Users;
+import POJO.Users;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import spdvi.POJO.Spaces;
+import POJO.Spaces;
 
 /**
  *
@@ -209,24 +209,61 @@ public class DataAccess {
         return 0;
     }
     
+    
+    public int deleteUser(int id_registre) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "DELETE FROM dbo.usuaris WHERE id_registre = ?;"
+            );
+
+            insertStatement.setInt(1, id_registre);
+
+            int result = insertStatement.executeUpdate();
+
+            if(result == 0) {
+                System.out.println("No se ha eliminado nada");
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+    public int actualizarUser(String user, String Password, int id_registre) {
+        try (Connection connection = getConnection()) {
+        PreparedStatement updateStatement = connection.prepareStatement(
+        "UPDATE dbo.usuaris set usuari = ?, password = ? WHERE id_registre = ?;"
+        );
+        int result = updateStatement.executeUpdate();
+        
+        if(result == 0) {
+            System.out.println("No se ha eliminado nada");
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return 0;
+    }
+    
     public int insertSpace(Spaces newSpace) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
-            "INSERT INTO dbo.espai (registre, nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis, telefon)" 
-            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+            "INSERT INTO dbo.espai (nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis, telefon)" 
+            + "VALUES (?,?,?,?,?,?,?,?,?,?,?)"
             );
-            insertStatement.setString(1, "98");
-            insertStatement.setString(2, newSpace.getNom());
-            insertStatement.setString(3, newSpace.getDescripcions());
-            insertStatement.setString(4, newSpace.getMunicipi());
-            insertStatement.setString(5, newSpace.getAdreca());
-            insertStatement.setString(6, newSpace.getEmail());
-            insertStatement.setString(7, newSpace.getWeb());
-            insertStatement.setString(8, newSpace.getTipus());
-            insertStatement.setString(9, newSpace.getModalitats());
-            insertStatement.setString(10, newSpace.getGestor());
-            insertStatement.setString(11, newSpace.getServeis());
-            insertStatement.setInt(12, newSpace.getTelefon());
+            //insertStatement.setString(1, "98");
+            insertStatement.setString(1, newSpace.getNom());
+            insertStatement.setString(2, newSpace.getDescripcions());
+            insertStatement.setString(3, newSpace.getMunicipi());
+            insertStatement.setString(4, newSpace.getAdreca());
+            insertStatement.setString(5, newSpace.getEmail());
+            insertStatement.setString(6, newSpace.getWeb());
+            insertStatement.setString(7, newSpace.getTipus());
+            insertStatement.setString(8, newSpace.getModalitats());
+            insertStatement.setString(9, newSpace.getGestor());
+            insertStatement.setString(10, newSpace.getServeis());
+            insertStatement.setInt(11, newSpace.getTelefon());
             
             int result = insertStatement.executeUpdate();
             

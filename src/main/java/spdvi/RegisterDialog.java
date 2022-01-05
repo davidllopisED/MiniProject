@@ -5,10 +5,8 @@
 package spdvi;
 
 import email.Mail;
-import java.nio.charset.Charset;
-import spdvi.POJO.Users;
-import java.util.Random;
-import javax.swing.JOptionPane;
+import POJO.Users;
+
 
 /**
  *
