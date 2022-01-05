@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import spdvi.POJO.Spaces;
+import POJO.Spaces;
 
 /**
  *

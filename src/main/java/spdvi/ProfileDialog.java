@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import spdvi.POJO.Users;
+import POJO.Users;
 
 /**
  *
@@ -179,21 +179,8 @@ public class ProfileDialog extends javax.swing.JDialog {
         deleteDialog.setVisible(true);
         
         if (this.confirmDelete) {
-            try (Connection connection = da.getConnection()) {
-            PreparedStatement insertStatement = connection.prepareStatement(
-            "DELETE FROM dbo.usuaris WHERE id_registre = ?;");
-            
-            insertStatement.setInt(1, id_registre);
-            
-            int result = insertStatement.executeUpdate();
-            
-            if(result == 0) {
-                System.out.println("No se ha eliminado nada");
-            }
-            } catch (SQLException ex) {
-            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Ha sucedido un error");
-        }
+            DataAccess dataAccess = new DataAccess();
+            dataAccess.deleteUser(actualuser.getId_registre());
             System.exit(101);
         }
     }//GEN-LAST:event_btnBorrarActionPerformed
@@ -206,25 +193,9 @@ public class ProfileDialog extends javax.swing.JDialog {
             lblError.setText("Hay espacios en blanco");
         }
         else {
-             try (Connection connection = da.getConnection()) {
-            PreparedStatement insertStatement = connection.prepareStatement(
-            "UPDATE dbo.usuaris set usuari = ?, password = ? WHERE id_registre = ?;");
-            
-            String password = da.convertirSHA256(pwdClave.getText());
-            
-            insertStatement.setString(1, txtUsuario.getText());
-            insertStatement.setString(2, password);
-            insertStatement.setInt(3, actualuser.getId_registre());
-            
-            int result = insertStatement.executeUpdate();
-            
-            if(result == 0) {
-                System.out.println("No se ha eliminado nada");
-            }
-            } catch (SQLException ex) {
-            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Ha sucedido un error");
-        }
+             DataAccess dataAccess = new DataAccess();
+             String password = da.convertirSHA256(pwdClave.getText());
+             dataAccess.actualizarUser(txtUsuario.getText(), password, actualuser.getId_registre());
              this.setVisible(false); 
         }
     }//GEN-LAST:event_btnActualizarActionPerformed

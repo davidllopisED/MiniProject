@@ -4,16 +4,8 @@
  */
 package spdvi;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
-import javax.swing.JList;
-import spdvi.POJO.Spaces;
+import POJO.Spaces;
 
 /**
  *
@@ -22,7 +14,6 @@ import spdvi.POJO.Spaces;
 public class DeleteSpaceDialog extends javax.swing.JDialog {
     private final SpaceFrame spaceFrame;
     private JComboBox<Spaces> comboBox;
-    DataAccess da = new DataAccess();
     /**
      * Creates new form DeleteObraDialog
      * 
@@ -87,42 +78,29 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:  
-        UpdateSpaceComboModel();
+        UpdateObraComboModel();
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
        Spaces selectedObra = (Spaces) comboBox.getSelectedItem();
-       
-       
-       try (Connection connection = da.getConnection()) {
-            PreparedStatement insertStatement = connection.prepareStatement(
-            "DELETE FROM dbo.espai WHERE registre = ?;");
-            
-            insertStatement.setString(1, selectedObra.getFk_id_registre());
-            
-            int result = insertStatement.executeUpdate();
-            
-            if(result == 0) {
-                System.out.println("No se ha eliminado nada");
-            }
-            } catch (SQLException ex) {
-            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Ha sucedido un error");
-        }
-       spaceFrame.UpdateSpaceListView();
-       
-       UpdateSpaceComboModel();
+       /*mainForm.obras.remove(selectedObra);
+       mainForm.UpdateObraListView();
+       mainForm.writeData();
+       mainForm.lstObras.setSelectedIndex(0);
+       mainForm.lstObras.validate();*/
+       UpdateObraComboModel();
     }//GEN-LAST:event_btnDeleteActionPerformed
     
     
-    private void UpdateSpaceComboModel() {
+    private void UpdateObraComboModel() {
         
-        DefaultComboBoxModel<Spaces> spacesComboBoxModel = new DefaultComboBoxModel<Spaces>();
-        for(Spaces s: da.getSpaces()) {
-            spacesComboBoxModel.addElement(s);
+        /*DefaultComboBoxModel<Obra> obraComboBoxModel = new DefaultComboBoxModel<Obra>();
+        for(Obra o: mainForm.obras) {
+            obraComboBoxModel.addElement(o);
         }
-        comboBox.setModel(spacesComboBoxModel);
+        comboBox.setModel(obraComboBoxModel);*/
         
     }
     
