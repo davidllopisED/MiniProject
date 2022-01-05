@@ -216,17 +216,17 @@ public class DataAccess {
             + "VALUES (?,?,?,?,?,?,?,?,?,?,?)"
             );
             //insertStatement.setString(1, "98");
-            insertStatement.setString(2, newSpace.getNom());
-            insertStatement.setString(3, newSpace.getDescripcions());
-            insertStatement.setString(4, newSpace.getMunicipi());
-            insertStatement.setString(5, newSpace.getAdreca());
-            insertStatement.setString(6, newSpace.getEmail());
-            insertStatement.setString(7, newSpace.getWeb());
-            insertStatement.setString(8, newSpace.getTipus());
-            insertStatement.setString(9, newSpace.getModalitats());
-            insertStatement.setString(10, newSpace.getGestor());
-            insertStatement.setString(11, newSpace.getServeis());
-            insertStatement.setInt(12, newSpace.getTelefon());
+            insertStatement.setString(1, newSpace.getNom());
+            insertStatement.setString(2, newSpace.getDescripcions());
+            insertStatement.setString(3, newSpace.getMunicipi());
+            insertStatement.setString(4, newSpace.getAdreca());
+            insertStatement.setString(5, newSpace.getEmail());
+            insertStatement.setString(6, newSpace.getWeb());
+            insertStatement.setString(7, newSpace.getTipus());
+            insertStatement.setString(8, newSpace.getModalitats());
+            insertStatement.setString(9, newSpace.getGestor());
+            insertStatement.setString(10, newSpace.getServeis());
+            insertStatement.setInt(11, newSpace.getTelefon());
             
             int result = insertStatement.executeUpdate();
             
