@@ -209,6 +209,24 @@ public class DataAccess {
         return 0;
     }
     
+    
+    public int actualizarUser(String user, String Password, int id_registre) {
+        try (Connection connection = getConnection()) {
+        PreparedStatement updateStatement = connection.prepareStatement(
+        "UPDATE dbo.usuaris set usuari = ?, password = ? WHERE id_registre = ?;"
+        );
+        int result = updateStatement.executeUpdate();
+        
+        if(result == 0) {
+                System.out.println("No se ha eliminado nada");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return 0;
+    }
+    
     public int insertSpace(Spaces newSpace) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
