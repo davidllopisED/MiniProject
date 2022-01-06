@@ -20,6 +20,7 @@ import POJO.Spaces;
  */
 public class SpaceEditorDialog extends javax.swing.JDialog {
     DataAccess da;
+    boolean visible = false;
     /**
      * Creates new form SpaceEditorDialog
      */
@@ -313,21 +314,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtImagenNameFocusGained
 
     private void lstSpacesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstSpacesValueChanged
-        /*ByteArrayOutputStream outputStream;
-        BufferedImage originalImage;
-
-        try {
-            BlockBlobClient blobClient = containerClient.getBlobClient(jList1.getSelectedValue()).getBlockBlobClient();
-            int dataSize = (int) blobClient.getProperties().getBlobSize();
-            outputStream = new ByteArrayOutputStream(dataSize);
-            blobClient.downloadStream(outputStream); //Thread Blocking
-            originalImage = ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray()));
-            ImageIcon icon = resizeImageIcon(originalImage, lblImage.getWidth(), lblImage.getHeight());
-            lblImage.setIcon(icon);
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
-        }
-        */
+       
     }//GEN-LAST:event_lstSpacesValueChanged
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
@@ -350,11 +337,12 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
                 txtModalidad.getText(), 
                 txtGestor.getText(), 
                 txtService.getText(), 
-                Integer.parseInt(txtPhone.getText())
+                Integer.parseInt(txtPhone.getText()),
+                chbMostrar.isSelected()
         );
         
         DataAccess da = new DataAccess();
-        int newUserId = da.insertSpace(newSpace);
+        da.insertSpace(newSpace);
         this.setVisible(false); 
     }//GEN-LAST:event_btnAcceptActionPerformed
 

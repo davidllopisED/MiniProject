@@ -145,6 +145,7 @@ public class RegisterDialog extends javax.swing.JDialog {
         if(create == true) {
                 
                 String password = dataAccess.randomPassword();
+                System.out.println(password);
                 String subject = "Contraseña de tu cuenta.";
                 String to = txtCorreo.getText();
                 String user = txtUsuario.getText();
