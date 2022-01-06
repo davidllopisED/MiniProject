@@ -402,28 +402,76 @@ public class SpaceFrame extends javax.swing.JFrame {
             
             switch(elemento){
             case "Nombre" -> {
-                if(s.getNom().equals(search))
+                if(s.getNom().equals(search)){
+                    if (!actualUser.isAdmin()){
+                        if(s.isVisible()){
+                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                        }
+                    }
+                    else {
                     defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                    }
+                }
             }
             case "Municipio" -> {
-                if(s.getMunicipi().equals(search))
+                if(s.getMunicipi().equals(search)){
+                    if (!actualUser.isAdmin()){
+                        if(s.isVisible()){
+                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                        }
+                    }
+                    else {
                     defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-            }
+                    }
+                }
+                }
             case "Direccion" -> {
-                if(s.getAdreca().equals(search))
+                if(s.getAdreca().equals(search)){
+                    if (!actualUser.isAdmin()){
+                        if(s.isVisible()){
+                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                        }
+                    }
+                    else {
                     defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                    }
+                }  
             }
             case "Tipo" -> {
-                if(s.getTipus().equals(search))
+                if(s.getTipus().equals(search)){
+                    if (!actualUser.isAdmin()){
+                        if(s.isVisible()){
+                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                        }
+                    }
+                    else {
                     defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                    }
+                } 
             }
             case "Servicio" -> {
-                if(s.getServeis().equals(search))
+                if(s.getServeis().equals(search)){
+                    if (!actualUser.isAdmin()){
+                        if(s.isVisible()){
+                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                        }
+                    }
+                    else {
                     defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                    }
+                }
             }
             case"Modalidad" -> {
-                if(s.getModalitats().equals(search))
+                if(s.getModalitats().equals(search)){
+                    if (!actualUser.isAdmin()){
+                        if(s.isVisible()){
+                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                        }
+                    }
+                    else {
                     defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                    }
+                }   
             }
         }
                      
@@ -434,13 +482,23 @@ public class SpaceFrame extends javax.swing.JFrame {
 
    public void UpdateSpaceListView() {
         DefaultListModel<String> defaultListModel = new DefaultListModel<>();
-
+        
         for (Spaces s: da.getSpaces()) {
+        if (!actualUser.isAdmin()){
+                if(s.isVisible()){
+                defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+                }
+            }
+         else {
             defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
+            }
+        
         }
+   
         
         lstSpacesName.setModel(defaultListModel);      
     }
+
    
     private void lstSpacesNameValueChanged(javax.swing.event.ListSelectionEvent evt) {
         String selectedSpace = lstSpacesName.getSelectedValue();

@@ -168,7 +168,8 @@ public class DataAccess {
                         resultSet.getString("modalitats"),
                         resultSet.getString("gestor"),
                         resultSet.getString("serveis"),
-                        resultSet.getInt("telefon")
+                        resultSet.getInt("telefon"),
+                        resultSet.getBoolean("visible")
                 );
                 spaces.add(space);
             }
@@ -248,11 +249,16 @@ public class DataAccess {
         return 0;
     }
     
-    public int actualizarUser(String user, String Password, int id_registre) {
+    public int actualizarUser(String user, String password, int id_registre) {
         try (Connection connection = getConnection()) {
         PreparedStatement updateStatement = connection.prepareStatement(
         "UPDATE dbo.usuaris set usuari = ?, password = ? WHERE id_registre = ?;"
         );
+        
+        updateStatement.setString(1, user);
+        updateStatement.setString(2, password);
+        updateStatement.setInt(3, id_registre);
+        
         int result = updateStatement.executeUpdate();
         
         if(result == 0) {
@@ -265,13 +271,30 @@ public class DataAccess {
         return 0;
     }
     
+    public int newRegistre(){
+        try (Connection connection = getConnection()) {
+                PreparedStatement selectStatetement = connection.prepareStatement(
+                        "SELECT MAX(registre) AS newId FROM dbo.espai"
+                );
+                ResultSet resultSet = selectStatetement.executeQuery();
+                if (!resultSet.next()) {
+                    return 0;
+                }
+                int maxregistre = resultSet.getInt("newId") + 1;
+                
+                return maxregistre;
+        }catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
     public int insertSpace(Spaces newSpace) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
-            "INSERT INTO dbo.espai (nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis, telefon)" 
-            + "VALUES (?,?,?,?,?,?,?,?,?,?,?)"
+            "INSERT INTO dbo.espai (nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis, telefon, visible, registre)" 
+            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)"
             );
-            //insertStatement.setString(1, "98");
             insertStatement.setString(1, newSpace.getNom());
             insertStatement.setString(2, newSpace.getDescripcions());
             insertStatement.setString(3, newSpace.getMunicipi());
@@ -283,6 +306,8 @@ public class DataAccess {
             insertStatement.setString(9, newSpace.getGestor());
             insertStatement.setString(10, newSpace.getServeis());
             insertStatement.setInt(11, newSpace.getTelefon());
+            insertStatement.setBoolean(12, newSpace.isVisible());
+            insertStatement.setString(13, String.valueOf(newRegistre()));
             
             int result = insertStatement.executeUpdate();
             

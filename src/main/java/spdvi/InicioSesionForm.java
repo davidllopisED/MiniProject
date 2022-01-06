@@ -6,6 +6,8 @@ package spdvi;
 
 import java.util.ArrayList;
 import POJO.Users;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -153,12 +155,10 @@ public class InicioSesionForm extends javax.swing.JFrame {
         SpaceFrame frame2 = new SpaceFrame(actualUser);
         frame2.setVisible(true);
         this.setVisible(false);
-        }
-        
-        
-        
+        }     
     }//GEN-LAST:event_btnIniciarActionPerformed
 
+    
     private void pwdPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwdPasswordActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_pwdPasswordActionPerformed
@@ -213,3 +213,5 @@ public class InicioSesionForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
+
+

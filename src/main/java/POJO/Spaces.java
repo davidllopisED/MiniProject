@@ -12,11 +12,12 @@ package POJO;
 public class Spaces {
     private String fk_id_registre, nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis;
     private int telefon;
-
+    private boolean visible;
+    
     public Spaces() {
     }
 
-    public Spaces(String fk_id_registre, String nom, String descripcions, String municipi, String adreca, String email, String web, String tipus, String modalitats, String gestor, String serveis, int telefon) {
+    public Spaces(String fk_id_registre, String nom, String descripcions, String municipi, String adreca, String email, String web, String tipus, String modalitats, String gestor, String serveis, int telefon, boolean visible) {
         this.fk_id_registre = fk_id_registre;
         this.nom = nom;
         this.descripcions = descripcions;
@@ -29,6 +30,7 @@ public class Spaces {
         this.gestor = gestor;
         this.serveis = serveis;
         this.telefon = telefon;
+        this.visible = visible;
     }
 
     public String getFk_id_registre() {
@@ -127,6 +129,15 @@ public class Spaces {
         this.telefon = telefon;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    
     @Override
     public String toString() {
         return fk_id_registre + ": \"" + nom + "\". " + municipi + ", " + adreca;
