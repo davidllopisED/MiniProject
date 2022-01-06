@@ -14,6 +14,12 @@ public class Pictures {
     int id;
     URL url;
 
+    public Pictures(int id, URL url) {
+        this.id = id;
+        this.url = url;
+    }
+
+    
     public int getId() {
         return id;
     }
