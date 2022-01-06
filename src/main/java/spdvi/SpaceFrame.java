@@ -5,19 +5,47 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import POJO.Spaces;
 import POJO.Users;
+import com.azure.core.util.Context;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.azure.storage.blob.models.BlobRange;
+import com.azure.storage.blob.models.DownloadRetryOptions;
+import com.azure.storage.blob.specialized.BlockBlobClient;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author bryan
  */
-public class SpaceFrame extends javax.swing.JFrame {
+public class SpaceFrame extends javax.swing.JFrame implements Runnable {
     public static Users actualUser = new Users();
     JList<String> lstSpacesName = new JList<>();
     DataAccess da = new DataAccess();
-
+    private BlobServiceClient blobServiceClient;
+    private BlobContainerClient containerClient;
+    Properties properties = new Properties();
+    private Thread downloadThread;
+    
     public SpaceFrame(Users actualUser) {
         initComponents();
         setResizable(false);
+        try {
+            properties.load(SpaceFrame.class.getClassLoader().getResourceAsStream("BlobService.properties"));
+            blobServiceClient = new BlobServiceClientBuilder().connectionString(properties.getProperty("connection")).buildClient();
+            containerClient = blobServiceClient.getBlobContainerClient(properties.getProperty("containerName"));
+        } catch (IOException ex) {
+            Logger.getLogger(SpaceFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         scpSpaces.setViewportView(lstSpacesName);
         this.actualUser = actualUser;
         
@@ -73,6 +101,7 @@ public class SpaceFrame extends javax.swing.JFrame {
         txtService = new javax.swing.JTextField();
         lblGestor = new javax.swing.JLabel();
         txtGestor = new javax.swing.JTextField();
+        prgDownloadImage = new javax.swing.JProgressBar();
         btnInsert = new javax.swing.JButton();
         cmbElemento = new javax.swing.JComboBox<>();
         btnEditar = new javax.swing.JButton();
@@ -139,28 +168,26 @@ public class SpaceFrame extends javax.swing.JFrame {
             panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panSpaceLayout.createSequentialGroup()
                 .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panSpaceLayout.createSequentialGroup()
-                        .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panSpaceLayout.createSequentialGroup()
-                                .addGap(0, 18, Short.MAX_VALUE)
-                                .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panSpaceLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblEmailData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblWebData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(panSpaceLayout.createSequentialGroup()
-                                        .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cboImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(lblPhoneData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panSpaceLayout.createSequentialGroup()
+                        .addGap(0, 18, Short.MAX_VALUE)
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panSpaceLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(194, 194, 194)))
+                        .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblEmailData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblWebData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(panSpaceLayout.createSequentialGroup()
+                                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cboImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(lblPhoneData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(panSpaceLayout.createSequentialGroup()
+                                .addComponent(lblPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(prgDownloadImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtGestor)
                     .addComponent(txtModalidad, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -185,14 +212,13 @@ public class SpaceFrame extends javax.swing.JFrame {
         panSpaceLayout.setVerticalGroup(
             panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panSpaceLayout.createSequentialGroup()
-                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panSpaceLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cboImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panSpaceLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(prgDownloadImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panSpaceLayout.createSequentialGroup()
                         .addComponent(lblSpaceName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblDescription)
@@ -205,10 +231,16 @@ public class SpaceFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblDirection)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panSpaceLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblType)
-                        .addGap(4, 4, 4)))
+                        .addGap(4, 4, 4))
+                    .addGroup(panSpaceLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(cboImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(panSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panSpaceLayout.createSequentialGroup()
                         .addComponent(lblEmail)
@@ -241,7 +273,7 @@ public class SpaceFrame extends javax.swing.JFrame {
                 .addComponent(lblGestor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtGestor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnInsert.setText("Insertar");
@@ -480,6 +512,60 @@ public class SpaceFrame extends javax.swing.JFrame {
         lstSpacesName.setModel(defaultListModel); 
     }//GEN-LAST:event_btnSearchActionPerformed
 
+    private void downloadImage() {
+        // Downloading big images in chunks of 1kB might be very slow because of the request overhead to azure. Modify the algorithm to donwload eavery image in, for instance 20 chunks.
+
+        ByteArrayOutputStream outputStream;
+        BufferedImage originalImage;
+        try {
+            BlockBlobClient blobClient = containerClient.getBlobClient(lstSpacesName.getSelectedValue()).getBlockBlobClient();
+            int dataSize = (int) blobClient.getProperties().getBlobSize();
+//            int numberOfBlocks = dataSize / 1024;
+            int numberOfBlocks = 20;
+            int numberOfBPerBlock = dataSize / numberOfBlocks;  // Split every image in 20 blocks. That is, make 20 requests to Azure.
+            System.out.println("Starting download of " + dataSize + " bytes in " + numberOfBlocks + " " + numberOfBPerBlock/1024 + "kB chunks");
+
+            
+            int i = 0;
+            outputStream = new ByteArrayOutputStream(dataSize);
+
+            while (i < numberOfBlocks) {
+                BlobRange range = new BlobRange(i * numberOfBPerBlock, (long)numberOfBPerBlock);
+                DownloadRetryOptions options = new DownloadRetryOptions().setMaxRetryRequests(5);
+
+                System.out.println(i + ": Downloading bytes " + range.getOffset() + " to " + (range.getOffset() + range.getCount()) + " with status "
+                        + blobClient.downloadStreamWithResponse(outputStream, range, options, null, false,
+                                Duration.ofSeconds(30), Context.NONE));
+                i++;
+                prgDownloadImage.setValue(i * prgDownloadImage.getMaximum() / (numberOfBlocks + 1));
+            }
+
+            // Download the last bytes of the image
+            BlobRange range = new BlobRange(i * numberOfBPerBlock);
+            DownloadRetryOptions options = new DownloadRetryOptions().setMaxRetryRequests(5);
+            System.out.println(i + ": Downloading bytes " + range.getOffset() + " to " + dataSize + " with status "
+                    + blobClient.downloadStreamWithResponse(outputStream, range, options, null, false,
+                            Duration.ofSeconds(30), Context.NONE));
+            i++;
+            prgDownloadImage.setValue(i * prgDownloadImage.getMaximum() / (numberOfBlocks + 1));
+            
+//            blobClient.downloadStream(outputStream);  // Thread Blocking
+            DataAccess dataAccess = new DataAccess();
+            originalImage = ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray()));
+            ImageIcon icon = dataAccess.resizeImageIcon(originalImage, lblImage.getWidth(), lblImage.getHeight());
+            lblImage.setIcon(icon);
+            outputStream.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void run() {
+        System.out.println(Thread.currentThread().getName());
+        downloadImage();
+    }
+    
    public void UpdateSpaceListView() {
         DefaultListModel<String> defaultListModel = new DefaultListModel<>();
         
@@ -503,6 +589,12 @@ public class SpaceFrame extends javax.swing.JFrame {
     private void lstSpacesNameValueChanged(javax.swing.event.ListSelectionEvent evt) {
         String selectedSpace = lstSpacesName.getSelectedValue();
         
+        if (!evt.getValueIsAdjusting()) {  //This line prevents double events when selecting by click
+            downloadThread = new Thread(this);
+            downloadThread.start();
+            lblImage.setText("");
+            lblImage.setIcon(new ImageIcon(getClass().getResource("/gif/spinner.gif")));
+        }
         if (selectedSpace != null) {
             String[] infoSpace = (selectedSpace.split(", "));
             for (Spaces s: da.getSpaces()) {
@@ -589,6 +681,7 @@ public class SpaceFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem mniAllSpaces;
     private javax.swing.JMenuItem mniExit;
     private javax.swing.JPanel panSpace;
+    private javax.swing.JProgressBar prgDownloadImage;
     private javax.swing.JScrollPane scpComments;
     private javax.swing.JScrollPane scpDescription;
     private javax.swing.JScrollPane scpDescription1;
