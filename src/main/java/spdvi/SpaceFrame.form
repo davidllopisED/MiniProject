@@ -62,9 +62,9 @@
                   <Component id="btnInsert" alignment="0" pref="165" max="32767" attributes="0"/>
                   <Component id="btnEditar" alignment="0" pref="165" max="32767" attributes="0"/>
                   <Component id="btnBorrar" alignment="1" pref="165" max="32767" attributes="0"/>
-                  <Component id="scpSpaces" alignment="0" max="32767" attributes="0"/>
+                  <Component id="scpSpaces" alignment="0" min="-2" pref="157" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="txtSearch" min="-2" pref="459" max="-2" attributes="0"/>
@@ -78,7 +78,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="scpDescription1" pref="276" max="32767" attributes="0"/>
+                              <Component id="scpDescription1" pref="270" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
