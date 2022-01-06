@@ -5,6 +5,7 @@
  */
 package spdvi;
 
+import POJO.Pictures;
 import POJO.Users;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -145,6 +146,28 @@ public class DataAccess {
             System.out.println("Esta vacio");
         }
     return users;
+    }
+    
+    public ArrayList<Pictures> getImages() {
+    ArrayList<Pictures> pictures = new ArrayList<>();
+        try (Connection connection = getConnection()){
+            PreparedStatement selectStatement = 
+                    connection.prepareStatement(
+                            "SELECT * FROM dbo.imatges"
+                    );
+            ResultSet resultSet = selectStatement.executeQuery();
+            while (resultSet.next()) {                
+                Pictures picture = new Pictures(
+                        resultSet.getInt("id_imatge"),
+                        resultSet.getURL("url")
+                );
+                pictures.add(picture);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Esta vacio");
+        }
+        return pictures;
     }
     
     public ArrayList<Spaces> getSpaces() {
