@@ -13,6 +13,14 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import POJO.Spaces;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.azure.storage.blob.models.BlobHttpHeaders;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Properties;
 
 /**
  *
@@ -21,6 +29,11 @@ import POJO.Spaces;
 public class SpaceEditorDialog extends javax.swing.JDialog {
     DataAccess da;
     boolean visible = false;
+    
+    private BlobServiceClient blobServiceClient;
+    private BlobContainerClient containerClient;
+    Properties properties = new Properties();
+    //Create a unique name for the container
     /**
      * Creates new form SpaceEditorDialog
      */
@@ -28,6 +41,13 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setResizable(false);
+        try {
+            properties.load(SpaceFrame.class.getClassLoader().getResourceAsStream("BlobService.properties"));
+            blobServiceClient = new BlobServiceClientBuilder().connectionString(properties.getProperty("connection")).buildClient();
+            containerClient = blobServiceClient.getBlobContainerClient(properties.getProperty("containerName"));
+        } catch (IOException ex) {
+            Logger.getLogger(SpaceFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -294,7 +314,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
-        int returnOption = fileChooser.showOpenDialog(this);
+        /*int returnOption = fileChooser.showOpenDialog(this);
         if (returnOption == JFileChooser.APPROVE_OPTION){
             BufferedImage bufferedImage;
             try {
@@ -305,6 +325,30 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
                 Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
             }
             //"\\AppData\\Local\\UserList2\\images\\" 
+        }*/
+        
+        //PARTE DE REVISION
+        int returnValue = fileChooser.showOpenDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            BlobClient blobClient = containerClient.getBlobClient(fileChooser.getSelectedFile().getName());
+            txtImagenName.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            try {
+                BufferedImage bufferedImage = ImageIO.read(fileChooser.getSelectedFile().getAbsoluteFile());
+                BufferedImage bufferedImagePath = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath()));
+                ImageIcon icon = da.resizeImageIcon(bufferedImagePath, lblImage.getWidth(), lblImage.getHeight());
+                lblImage.setIcon(icon);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(bufferedImage, "jpg", baos);
+                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+                blobClient.upload(bais, baos.size());  // Thread blocking
+                BlobHttpHeaders headers = new BlobHttpHeaders();
+                headers.setContentType("image/jpeg");
+                blobClient.setHttpHeaders(headers);
+                baos.close();
+                bais.close();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
         }
     }//GEN-LAST:event_btnOpenActionPerformed
 

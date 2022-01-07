@@ -148,13 +148,15 @@ public class DataAccess {
     return users;
     }
     
-    public ArrayList<Pictures> getImages() {
+    public ArrayList<Pictures> getImages(Spaces espacio) {
     ArrayList<Pictures> pictures = new ArrayList<>();
         try (Connection connection = getConnection()){
             PreparedStatement selectStatement = 
                     connection.prepareStatement(
-                            "SELECT * FROM dbo.imatges"
+                            "SELECT id_imatge, url FROM dbo.imatges join dbo.espai_imatge on (dbo.espai_imatge.fk_id_imatge = dbo.imatges.id_imatge) WHERE fk_registre = ?;"
                     );
+            
+            selectStatement.setString(1, espacio.getFk_id_registre());
             ResultSet resultSet = selectStatement.executeQuery();
             while (resultSet.next()) {                
                 Pictures picture = new Pictures(
