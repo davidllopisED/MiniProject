@@ -25,6 +25,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import POJO.Spaces;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  *
@@ -148,7 +150,7 @@ public class DataAccess {
     return users;
     }
     
-    public ArrayList<Pictures> getImages(Spaces espacio) {
+    public ArrayList<Pictures> getImages(Spaces espacio) throws MalformedURLException {
     ArrayList<Pictures> pictures = new ArrayList<>();
         try (Connection connection = getConnection()){
             PreparedStatement selectStatement = 
@@ -158,13 +160,14 @@ public class DataAccess {
             
             selectStatement.setString(1, espacio.getFk_id_registre());
             ResultSet resultSet = selectStatement.executeQuery();
-            while (resultSet.next()) {                
+                while (resultSet.next()) {
+                    URL link = new URL(resultSet.getString("url"));
                 Pictures picture = new Pictures(
                         resultSet.getInt("id_imatge"),
-                        resultSet.getURL("url")
+                        link
                 );
                 pictures.add(picture);
-            }
+            } 
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Esta vacio");

@@ -1,5 +1,6 @@
 package spdvi;
 
+import POJO.Pictures;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -17,11 +18,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 
 /**
@@ -586,7 +589,6 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
             }
         
         }
-   
         
         lstSpacesName.setModel(defaultListModel);      
     }
@@ -616,9 +618,24 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
                     lblEmailData.setText(s.getEmail());
                     lblWebData.setText(s.getWeb());
                     lblPhoneData.setText(String.valueOf(s.getTelefon()));
+                    try {
+                        UpdateImagenComboModel(s);
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(SpaceFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
         }          
         }
+    }
+    
+    private void UpdateImagenComboModel(Spaces espacios) throws MalformedURLException {
+        
+        DefaultComboBoxModel<String> spacesComboBoxModel = new DefaultComboBoxModel<String>();
+        for(Pictures p: da.getImages(espacios)) {
+            spacesComboBoxModel.addElement(String.valueOf(p.getId()));
+        }
+        cboImagen.setModel(spacesComboBoxModel);
+        
     }
    
     /**

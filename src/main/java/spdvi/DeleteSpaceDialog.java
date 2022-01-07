@@ -81,7 +81,7 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:  
-        UpdateObraComboModel();
+        UpdateSpaceComboModel();
         
     }//GEN-LAST:event_formWindowOpened
 
@@ -90,11 +90,11 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
        Spaces selectedSpaces = (Spaces) comboBox.getSelectedItem();
        da.deleteSpace(selectedSpaces.getFk_id_registre());
        spaceFrame.UpdateSpaceListView();
-       UpdateObraComboModel();
+       UpdateSpaceComboModel();
     }//GEN-LAST:event_btnDeleteActionPerformed
     
     
-    private void UpdateObraComboModel() {
+    private void UpdateSpaceComboModel() {
         
         DefaultComboBoxModel<Spaces> spacesComboBoxModel = new DefaultComboBoxModel<Spaces>();
         for(Spaces s: da.getSpaces()) {

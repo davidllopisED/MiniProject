@@ -331,10 +331,10 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         int returnValue = fileChooser.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             BlobClient blobClient = containerClient.getBlobClient(fileChooser.getSelectedFile().getName());
-            txtImagenName.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            txtImagenName.setText(fileChooser.getSelectedFile().getAbsolutePath()); //El nombre lo pone
             try {
                 BufferedImage bufferedImage = ImageIO.read(fileChooser.getSelectedFile().getAbsoluteFile());
-                BufferedImage bufferedImagePath = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath()));
+                BufferedImage bufferedImagePath = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath())); //Pero no lo lee como imagen
                 ImageIcon icon = da.resizeImageIcon(bufferedImagePath, lblImage.getWidth(), lblImage.getHeight());
                 lblImage.setIcon(icon);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
