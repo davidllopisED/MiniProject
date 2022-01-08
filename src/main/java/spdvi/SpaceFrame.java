@@ -141,7 +141,7 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        panSpace.setBorder(javax.swing.BorderFactory.createTitledBorder("Read Users"));
+        panSpace.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         lblSpaceName.setText("Space Name");
 
@@ -356,7 +356,7 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(scpDescription1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                                .addComponent(scpDescription1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                                 .addContainerGap())
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(scpComments)
