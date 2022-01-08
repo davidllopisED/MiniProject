@@ -13,10 +13,12 @@ import java.net.URL;
 public class Pictures {
     int id;
     URL url;
+    String Name;
 
-    public Pictures(int id, URL url) {
+    public Pictures(int id, URL url, String Name) {
         this.id = id;
         this.url = url;
+        this.Name = Name;
     }
 
     
@@ -35,6 +37,16 @@ public class Pictures {
     public void setUrl(URL url) {
         this.url = url;
     }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String Name) {
+        this.Name = Name;
+    }
+    
+    
 
     @Override
     public String toString() {

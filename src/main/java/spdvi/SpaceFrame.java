@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -141,6 +142,11 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         lblSpaceName.setText("Space Name");
 
         cboImagen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Imagen" }));
+        cboImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboImagenActionPerformed(evt);
+            }
+        });
 
         txaDescription.setColumns(20);
         txaDescription.setRows(5);
@@ -286,6 +292,11 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         });
 
         cmbElemento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Municipio", "Direccion", "Tipo", "Servicio", "Modalidad" }));
+        cmbElemento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbElementoActionPerformed(evt);
+            }
+        });
 
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -434,11 +445,13 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         String search = txtSearch.getText();
         String elemento = cmbElemento.getSelectedItem().toString();
 
-        /*DefaultListModel defaultListModel1 = new DefaultListModel();
-        for (BlobItem blobItem : containerClient.listBlobs()) {
+        //DefaultListModel defaultListModel1 = new DefaultListModel();
+        /*for (BlobItem blobItem : containerClient.listBlobs()) {
             defaultListModel.addElement(blobItem.getName());
         }
         lstSpacesName.setModel(defaultListModel);*/
+        
+        
         for (Spaces s: da.getSpaces()) {
             
             switch(elemento){
@@ -521,13 +534,31 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         lstSpacesName.setModel(defaultListModel); 
     }//GEN-LAST:event_btnSearchActionPerformed
 
+    private void cmbElementoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbElementoActionPerformed
+
+    private void cboImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboImagenActionPerformed
+                                  
+
+        if (cboImagen.getSelectedItem() != null) {  //This line prevents double events when selecting by click
+//            System.out.println(Thread.currentThread().getName());
+            downloadThread = new Thread(this);
+            downloadThread.start();
+            downloadImage();
+                   
+        }
+       
+    }//GEN-LAST:event_cboImagenActionPerformed
+    
+    
     private void downloadImage() {
         // Downloading big images in chunks of 1kB might be very slow because of the request overhead to azure. Modify the algorithm to donwload eavery image in, for instance 20 chunks.
 
         ByteArrayOutputStream outputStream;
         BufferedImage originalImage;
         try {
-            BlockBlobClient blobClient = containerClient.getBlobClient(lstSpacesName.getSelectedValue()).getBlockBlobClient();
+            BlockBlobClient blobClient = containerClient.getBlobClient(cboImagen.getSelectedItem().toString()).getBlockBlobClient();
             int dataSize = (int) blobClient.getProperties().getBlobSize();
 //            int numberOfBlocks = dataSize / 1024;
             int numberOfBlocks = 20;
@@ -598,10 +629,10 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         String selectedSpace = lstSpacesName.getSelectedValue();
         
         if (!evt.getValueIsAdjusting()) {  //This line prevents double events when selecting by click
-            downloadThread = new Thread(this);
-            downloadThread.start();
+         //   downloadThread = new Thread(this);
+         //   downloadThread.start();
             lblImage.setText("");
-            lblImage.setIcon(new ImageIcon(getClass().getResource("/gif/spinner.gif")));
+            //lblImage.setIcon(new ImageIcon(getClass().getResource("/gif/spinner.gif"))); //ESTA COMENTADA POR QUE ME DA ERROR
         }
         if (selectedSpace != null) {
             String[] infoSpace = (selectedSpace.split(", "));
@@ -628,11 +659,13 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         }
     }
     
+    
+    
     private void UpdateImagenComboModel(Spaces espacios) throws MalformedURLException {
         
         DefaultComboBoxModel<String> spacesComboBoxModel = new DefaultComboBoxModel<String>();
         for(Pictures p: da.getImages(espacios)) {
-            spacesComboBoxModel.addElement(String.valueOf(p.getId()));
+            spacesComboBoxModel.addElement(String.valueOf(p.getName()));
         }
         cboImagen.setModel(spacesComboBoxModel);
         
@@ -642,11 +675,7 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
