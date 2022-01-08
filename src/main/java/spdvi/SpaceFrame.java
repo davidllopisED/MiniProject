@@ -629,8 +629,8 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         String selectedSpace = lstSpacesName.getSelectedValue();
         
         if (!evt.getValueIsAdjusting()) {  //This line prevents double events when selecting by click
-         //   downloadThread = new Thread(this);
-         //   downloadThread.start();
+            downloadThread = new Thread(this);
+            downloadThread.start();
             lblImage.setText("");
             //lblImage.setIcon(new ImageIcon(getClass().getResource("/gif/spinner.gif"))); //ESTA COMENTADA POR QUE ME DA ERROR
         }
