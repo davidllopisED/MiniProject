@@ -121,6 +121,11 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         mniExit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         btnSearch.setText("Buscar");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -520,6 +525,10 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         
         lstSpacesName.setModel(defaultListModel); 
     }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        UpdateSpaceListView();
+    }//GEN-LAST:event_formWindowOpened
 
     private void downloadImage() {
         // Downloading big images in chunks of 1kB might be very slow because of the request overhead to azure. Modify the algorithm to donwload eavery image in, for instance 20 chunks.
