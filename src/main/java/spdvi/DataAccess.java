@@ -155,16 +155,17 @@ public class DataAccess {
         try (Connection connection = getConnection()){
             PreparedStatement selectStatement = 
                     connection.prepareStatement(
-                            "SELECT id_imatge, url FROM dbo.imatges join dbo.espai_imatge on (dbo.espai_imatge.fk_id_imatge = dbo.imatges.id_imatge) WHERE fk_registre = ?;"
+                            "SELECT id_imatge, url, Name FROM dbo.imatges join dbo.espai_imatge on (dbo.espai_imatge.fk_id_imatge = dbo.imatges.id_imatge) WHERE fk_registre = ?;"
                     );
             
             selectStatement.setString(1, espacio.getFk_id_registre());
             ResultSet resultSet = selectStatement.executeQuery();
                 while (resultSet.next()) {
                     URL link = new URL(resultSet.getString("url"));
+                    String Name = resultSet.getString("Name");
                 Pictures picture = new Pictures(
                         resultSet.getInt("id_imatge"),
-                        link
+                        link, Name
                 );
                 pictures.add(picture);
             } 
