@@ -4,7 +4,6 @@
  */
 package POJO;
 
-import java.net.URL;
 
 /**
  *
@@ -12,12 +11,10 @@ import java.net.URL;
  */
 public class Pictures {
     int id;
-    URL url;
     String Name;
 
-    public Pictures(int id, URL url, String Name) {
+    public Pictures(int id, String Name) {
         this.id = id;
-        this.url = url;
         this.Name = Name;
     }
 
@@ -28,14 +25,6 @@ public class Pictures {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public URL getUrl() {
-        return url;
-    }
-
-    public void setUrl(URL url) {
-        this.url = url;
     }
 
     public String getName() {
@@ -50,7 +39,7 @@ public class Pictures {
 
     @Override
     public String toString() {
-        return  "Picture Id:" + id;
+        return  id + ": " + Name;
     }
     
     
