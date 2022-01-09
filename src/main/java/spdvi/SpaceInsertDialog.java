@@ -29,6 +29,7 @@ import java.util.Properties;
 public class SpaceInsertDialog extends javax.swing.JDialog {
     DataAccess da;
     boolean visible = false;
+    boolean ImageChoosen = false;
     
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
@@ -337,6 +338,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
                 BufferedImage bufferedImagePath = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath())); //Pero no lo lee como imagen
                 ImageIcon icon = da.resizeImageIcon(bufferedImagePath, lblImage.getWidth(), lblImage.getHeight());
                 lblImage.setIcon(icon);
+                ImageChoosen = true;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(bufferedImage, "jpg", baos);
                 ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
