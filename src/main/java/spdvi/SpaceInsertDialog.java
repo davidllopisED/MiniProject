@@ -4,6 +4,7 @@
  */
 package spdvi;
 
+import POJO.Pictures;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,9 @@ import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobHttpHeaders;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.util.Properties;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,7 +33,8 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
     DataAccess da;
     boolean visible = false;
     boolean ImageChoosen = false;
-    
+    JFileChooser fileChooser = new JFileChooser();
+    private final URL noImage = getClass().getResource("/imagenes/Pasillo.jpg");
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
     Properties properties = new Properties();
@@ -314,7 +318,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         // TODO add your handling code here:
-        JFileChooser fileChooser = new JFileChooser();
+        
         /*int returnOption = fileChooser.showOpenDialog(this);
         if (returnOption == JFileChooser.APPROVE_OPTION){
             BufferedImage bufferedImage;
@@ -387,6 +391,21 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
                 chbMostrar.isSelected()
         );
         
+        Pictures p = new Pictures();
+        try {
+            if (ImageChoosen) {
+                p.setName(fileChooser.getSelectedFile().getAbsolutePath());
+                da.insertImage(p);
+            }
+            else {
+                p.setName(noImage.toString());
+                da.insertImage(p);
+            }
+        }
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            ex.printStackTrace();
+        }
         DataAccess da = new DataAccess();
            da.insertSpace(newSpace);
         this.setVisible(false); 
