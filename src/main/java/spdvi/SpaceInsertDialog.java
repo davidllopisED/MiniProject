@@ -34,7 +34,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
     boolean visible = false;
     boolean ImageChoosen = false;
     JFileChooser fileChooser = new JFileChooser();
-    private final URL noImage = getClass().getResource("/imagenes/Pasillo.jpg");
+    private final String noImage = "imagenes/Pasillo.jpg";
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
     Properties properties = new Properties();
@@ -391,15 +391,14 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
                 chbMostrar.isSelected()
         );
         
-        Pictures p = new Pictures();
+        
         try {
             if (ImageChoosen) {
-                p.setName(fileChooser.getSelectedFile().getAbsolutePath());
-                da.insertImage(p);
+                da.insertImage(fileChooser.getSelectedFile().getAbsolutePath());
             }
             else {
-                p.setName(noImage.toString());
-                da.insertImage(p);
+                
+                da.insertImage(noImage);
             }
         }
         catch (Exception ex) {
