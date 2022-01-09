@@ -408,14 +408,28 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         // TODO add your handling code here:
-        SpaceEditorDialog seDialog = new SpaceEditorDialog(this, true); //hacer la ventana insert true
-        seDialog.setVisible(true); //visible
+        SpaceInsertDialog siDialog = new SpaceInsertDialog(this, true); //hacer la ventana insert true
+        siDialog.setVisible(true); //visible
     }//GEN-LAST:event_btnInsertActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
+        String selectedSpace = lstSpacesName.getSelectedValue();
+        Spaces espacioEditar = new Spaces();
+        
+        if(selectedSpace != null) {
+            
+            String[] infoSpace = (selectedSpace.split(", "));
+            for (Spaces s: da.getSpaces()) {
+                if(s.getNom().equals(infoSpace[0]) && s.getAdreca().equals(infoSpace[1])){
+                    espacioEditar = s;
+                }
+        }   
+            
         SpaceEditorDialog seDialog = new SpaceEditorDialog(this, true); //hacer la ventana insert true
+        seDialog.setActualSpace(espacioEditar);
         seDialog.setVisible(true); //visible
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
