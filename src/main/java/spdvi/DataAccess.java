@@ -155,17 +155,15 @@ public class DataAccess {
         try (Connection connection = getConnection()){
             PreparedStatement selectStatement = 
                     connection.prepareStatement(
-                            "SELECT id_imatge, url, Name FROM dbo.imatges join dbo.espai_imatge on (dbo.espai_imatge.fk_id_imatge = dbo.imatges.id_imatge) WHERE fk_registre = ?;"
+                            "SELECT id_imatge, Name FROM dbo.imatges join dbo.espai_imatge on (dbo.espai_imatge.fk_id_imatge = dbo.imatges.id_imatge) WHERE fk_registre = ?;"
                     );
             
             selectStatement.setString(1, espacio.getFk_id_registre());
             ResultSet resultSet = selectStatement.executeQuery();
                 while (resultSet.next()) {
-                    URL link = new URL(resultSet.getString("url"));
                     String Name = resultSet.getString("Name");
                 Pictures picture = new Pictures(
-                        resultSet.getInt("id_imatge"),
-                        link, Name
+                        resultSet.getInt("id_imatge"),Name
                 );
                 pictures.add(picture);
             } 
@@ -263,6 +261,25 @@ public class DataAccess {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "DELETE FROM dbo.espai WHERE registre = ?;"
+            );
+
+            insertStatement.setString(1, registre);
+
+            int result = insertStatement.executeUpdate();
+
+            if(result == 0) {
+                System.out.println("No se ha eliminado nada");
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+    public int deleteRelation(String registre) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "DELETE FROM dbo.espai_imatge WHERE fk_registre = ?;"
             );
 
             insertStatement.setString(1, registre);

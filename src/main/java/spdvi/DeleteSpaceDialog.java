@@ -88,6 +88,7 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
        Spaces selectedSpaces = (Spaces) comboBox.getSelectedItem();
+       da.deleteRelation(selectedSpaces.getFk_id_registre());
        da.deleteSpace(selectedSpaces.getFk_id_registre());
        spaceFrame.UpdateSpaceListView();
        UpdateSpaceComboModel();
