@@ -18,6 +18,8 @@ public class Pictures {
         this.Name = Name;
     }
 
+    public Pictures() {
+    }
     
     public int getId() {
         return id;

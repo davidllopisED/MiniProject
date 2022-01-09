@@ -183,14 +183,14 @@ public class DataAccess {
         return pictures;
     }
     
-    public int insertImage(Pictures newPicture) {
+    public int insertImage(String newPicture) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "INSERT INTO dbo.imatges (Name)" 
             + "VALUES (?)"
             );
            
-            insertStatement.setString(1, newPicture.getName());
+            insertStatement.setString(1, newPicture);
             
             int result = insertStatement.executeUpdate();
             
