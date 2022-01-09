@@ -26,10 +26,9 @@ import java.util.Properties;
  *
  * @author bryan
  */
-public class SpaceEditorDialog extends javax.swing.JDialog {
+public class SpaceInsertDialog extends javax.swing.JDialog {
     DataAccess da;
     boolean visible = false;
-    Spaces actualSpace;
     
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
@@ -38,7 +37,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
     /**
      * Creates new form SpaceEditorDialog
      */
-    public SpaceEditorDialog(java.awt.Frame parent, boolean modal) {
+    public SpaceInsertDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setResizable(false);
@@ -49,14 +48,6 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         } catch (IOException ex) {
             Logger.getLogger(SpaceFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public Spaces getActualSpace() {
-        return actualSpace;
-    }
-
-    public void setActualSpace(Spaces actualSpace) {
-        this.actualSpace = actualSpace;
     }
 
     /**
@@ -104,11 +95,6 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("SpaceInsert");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
-        });
 
         btnOpen.setText("Abrir");
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
@@ -414,22 +400,6 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_chbMostrarActionPerformed
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-        txtSpaceName.setText(actualSpace.getNom());
-        txaDescription.setText(actualSpace.getDescripcions());
-        txtMunicipio.setText(actualSpace.getMunicipi());
-        txtDirection.setText(actualSpace.getAdreca());
-        txtType.setText(actualSpace.getTipus());
-        txtService.setText(actualSpace.getServeis());
-        txtModalidad.setText(actualSpace.getModalitats());
-        txtGestor.setText(actualSpace.getGestor());
-        txtEmail.setText(actualSpace.getEmail());
-        txtWeb.setText(actualSpace.getWeb());
-        txtPhone.setText(String.valueOf(actualSpace.getTelefon()));
-        chbMostrar.setSelected(actualSpace.isVisible());
-    }//GEN-LAST:event_formWindowOpened
-
     /**
      * @param args the command line arguments
      */
@@ -447,23 +417,21 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SpaceEditorDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SpaceInsertDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SpaceEditorDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SpaceInsertDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SpaceEditorDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SpaceInsertDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SpaceEditorDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SpaceInsertDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                SpaceEditorDialog dialog = new SpaceEditorDialog(new javax.swing.JFrame(), true);
+                SpaceInsertDialog dialog = new SpaceInsertDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
