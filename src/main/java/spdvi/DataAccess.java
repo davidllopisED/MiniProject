@@ -25,8 +25,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import POJO.Spaces;
+import com.azure.core.util.Context;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.models.BlobRange;
+import com.azure.storage.blob.models.DownloadRetryOptions;
+import com.azure.storage.blob.specialized.BlockBlobClient;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -373,4 +382,54 @@ public class DataAccess {
         }
         return 0;
     }
+    
+    
+    public void downloadImage(BlobContainerClient containerClient, javax.swing.JProgressBar prgDownloadImage, javax.swing.JComboBox<String> cboImagen, javax.swing.JLabel lblImage) {
+        // Downloading big images in chunks of 1kB might be very slow because of the request overhead to azure. Modify the algorithm to donwload eavery image in, for instance 20 chunks.
+
+        ByteArrayOutputStream outputStream;
+        BufferedImage originalImage;
+        try {
+            BlockBlobClient blobClient = containerClient.getBlobClient(cboImagen.getSelectedItem().toString()).getBlockBlobClient();
+            int dataSize = (int) blobClient.getProperties().getBlobSize();
+//            int numberOfBlocks = dataSize / 1024;
+            int numberOfBlocks = 20;
+            int numberOfBPerBlock = dataSize / numberOfBlocks;  // Split every image in 20 blocks. That is, make 20 requests to Azure.
+            System.out.println("Starting download of " + dataSize + " bytes in " + numberOfBlocks + " " + numberOfBPerBlock/1024 + "kB chunks");
+
+            
+            int i = 0;
+            outputStream = new ByteArrayOutputStream(dataSize);
+
+            while (i < numberOfBlocks) {
+                BlobRange range = new BlobRange(i * numberOfBPerBlock, (long)numberOfBPerBlock);
+                DownloadRetryOptions options = new DownloadRetryOptions().setMaxRetryRequests(5);
+
+                System.out.println(i + ": Downloading bytes " + range.getOffset() + " to " + (range.getOffset() + range.getCount()) + " with status "
+                        + blobClient.downloadStreamWithResponse(outputStream, range, options, null, false,
+                                Duration.ofSeconds(30), Context.NONE));
+                i++;
+                prgDownloadImage.setValue(i * prgDownloadImage.getMaximum() / (numberOfBlocks + 1));
+            }
+
+            // Download the last bytes of the image
+            BlobRange range = new BlobRange(i * numberOfBPerBlock);
+            DownloadRetryOptions options = new DownloadRetryOptions().setMaxRetryRequests(5);
+            System.out.println(i + ": Downloading bytes " + range.getOffset() + " to " + dataSize + " with status "
+                    + blobClient.downloadStreamWithResponse(outputStream, range, options, null, false,
+                            Duration.ofSeconds(30), Context.NONE));
+            i++;
+            prgDownloadImage.setValue(i * prgDownloadImage.getMaximum() / (numberOfBlocks + 1));
+            
+//            blobClient.downloadStream(outputStream);  // Thread Blocking
+            DataAccess dataAccess = new DataAccess();
+            originalImage = ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray()));
+            ImageIcon icon = dataAccess.resizeImageIcon(originalImage, lblImage.getWidth(), lblImage.getHeight());
+            lblImage.setIcon(icon);
+            outputStream.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+    
 }
