@@ -183,6 +183,34 @@ public class DataAccess {
         return pictures;
     }
     
+    public int insertImage(Pictures newPicture) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "INSERT INTO dbo.imatges (Name)" 
+            + "VALUES (?)"
+            );
+           
+            insertStatement.setString(1, newPicture.getName());
+            
+            int result = insertStatement.executeUpdate();
+            
+            if (result > 0) {
+                PreparedStatement selectStatetement = connection.prepareStatement(
+                        "SELECT MAX(id_imatge) AS newId FROM dbo.imatges"
+                );
+                ResultSet resultSet = selectStatetement.executeQuery();
+                if (!resultSet.next()) {
+                    return 0;
+                }
+                return resultSet.getInt("newId");
+            }
+            return result;
+        }catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
     public ArrayList<Spaces> getSpaces() {
         ArrayList<Spaces> spaces = new ArrayList<>();
         try (Connection connection = getConnection()){
