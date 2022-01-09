@@ -94,6 +94,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         txtGestor = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("SpaceInsert");
 
         btnOpen.setText("Abrir");
         btnOpen.addActionListener(new java.awt.event.ActionListener() {
@@ -276,6 +277,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
                                 .addComponent(txtWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(lblPhone)
+                                .addGap(0, 0, 0)
                                 .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(21, 21, 21))
                             .addGroup(layout.createSequentialGroup()
