@@ -4,6 +4,7 @@
  */
 package spdvi;
 
+import POJO.Pictures;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,23 +14,31 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import POJO.Spaces;
+import com.azure.core.util.Context;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import com.azure.storage.blob.models.BlobHttpHeaders;
+import com.azure.storage.blob.models.BlobRange;
+import com.azure.storage.blob.models.DownloadRetryOptions;
+import com.azure.storage.blob.specialized.BlockBlobClient;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.net.MalformedURLException;
+import java.time.Duration;
 import java.util.Properties;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
  * @author bryan
  */
-public class SpaceEditorDialog extends javax.swing.JDialog {
-    DataAccess da;
+public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
+    DataAccess da = new DataAccess();
     boolean visible = false;
     Spaces actualSpace;
+    private Thread downloadThread;
     
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
@@ -49,6 +58,14 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         } catch (IOException ex) {
             Logger.getLogger(SpaceFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        lstImages.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstImagesValueChanged(evt);
+            }
+        });
+        
+        
     }
 
     public Spaces getActualSpace() {
@@ -72,7 +89,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         btnOpen = new javax.swing.JButton();
         txtImagenName = new javax.swing.JTextField();
         scpImagen = new javax.swing.JScrollPane();
-        lstSpaces = new javax.swing.JList<>();
+        lstImages = new javax.swing.JList<>();
         btnAgregar = new javax.swing.JButton();
         lblSpaceName = new javax.swing.JLabel();
         txtSpaceName = new javax.swing.JTextField();
@@ -124,12 +141,12 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
             }
         });
 
-        lstSpaces.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        lstImages.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstSpacesValueChanged(evt);
+                lstImagesValueChanged(evt);
             }
         });
-        scpImagen.setViewportView(lstSpaces);
+        scpImagen.setViewportView(lstImages);
 
         btnAgregar.setText("Agregar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -196,20 +213,20 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(txtPhone, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblWeb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtWeb, javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(scpImagen, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(scpImagen, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                                 .addComponent(txtImagenName))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGap(32, 32, 32)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
                                 .addComponent(btnOpen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addComponent(lblImage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblWeb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtWeb, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addComponent(lblImage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,7 +290,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
                         .addComponent(txtDirection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnOpen)
                             .addComponent(txtImagenName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -371,10 +388,68 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         txtImagenName.selectAll();
     }//GEN-LAST:event_txtImagenNameFocusGained
 
-    private void lstSpacesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstSpacesValueChanged
-       
-    }//GEN-LAST:event_lstSpacesValueChanged
+    private void lstImagesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstImagesValueChanged
+       if (!evt.getValueIsAdjusting()) {  //This line prevents double events when selecting by click
+//            System.out.println(Thread.currentThread().getName());
+            downloadThread = new Thread(this);
+            downloadThread.start();
+//            downloadImage();
+            lblImage.setText("");
+            lblImage.setIcon(new ImageIcon(getClass().getResource("/gif/spinner.gif")));
+        }
+    }//GEN-LAST:event_lstImagesValueChanged
 
+    @Override
+    public void run() {
+        System.out.println(Thread.currentThread().getName());
+        downloadImage();
+    }
+    
+    private void downloadImage() {
+        // Downloading big images in chunks of 1kB might be very slow because of the request overhead to azure. Modify the algorithm to donwload eavery image in, for instance 20 chunks.
+
+        ByteArrayOutputStream outputStream;
+        BufferedImage originalImage;
+        try {
+            BlockBlobClient blobClient = containerClient.getBlobClient(lstImages.getSelectedValue()).getBlockBlobClient();
+            
+            int dataSize = (int) blobClient.getProperties().getBlobSize();
+            int numberOfBlocks = 20;
+            int numberOfBPerBlock = dataSize / numberOfBlocks;  // Split every image in 20 blocks. That is, make 20 requests to Azure.
+            System.out.println("Starting download of " + dataSize + " bytes in " + numberOfBlocks + " " + numberOfBPerBlock/1024 + "kB chunks");
+
+            
+            int i = 0;
+            outputStream = new ByteArrayOutputStream(dataSize);
+
+            while (i < numberOfBlocks) {
+                BlobRange range = new BlobRange(i * numberOfBPerBlock, (long)numberOfBPerBlock);
+                DownloadRetryOptions options = new DownloadRetryOptions().setMaxRetryRequests(5);
+
+                System.out.println(i + ": Downloading bytes " + range.getOffset() + " to " + (range.getOffset() + range.getCount()) + " with status "
+                        + blobClient.downloadStreamWithResponse(outputStream, range, options, null, false,
+                                Duration.ofSeconds(30), Context.NONE));
+                i++;
+            }
+
+            // Download the last bytes of the image
+            BlobRange range = new BlobRange(i * numberOfBPerBlock);
+            DownloadRetryOptions options = new DownloadRetryOptions().setMaxRetryRequests(5);
+            System.out.println(i + ": Downloading bytes " + range.getOffset() + " to " + dataSize + " with status "
+                    + blobClient.downloadStreamWithResponse(outputStream, range, options, null, false,
+                            Duration.ofSeconds(30), Context.NONE));
+            i++;
+            
+//            blobClient.downloadStream(outputStream);  // Thread Blocking
+            originalImage = ImageIO.read(new ByteArrayInputStream(outputStream.toByteArray()));
+            ImageIcon icon = da.resizeImageIcon(originalImage, lblImage.getWidth(), lblImage.getHeight());
+            lblImage.setIcon(icon);
+            outputStream.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+    
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAgregarActionPerformed
@@ -428,8 +503,23 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
         txtWeb.setText(actualSpace.getWeb());
         txtPhone.setText(String.valueOf(actualSpace.getTelefon()));
         chbMostrar.setSelected(actualSpace.isVisible());
+        try {
+            UpdateImagenJList(actualSpace);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(SpaceEditorDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowOpened
 
+    private void UpdateImagenJList(Spaces actualSpace) throws MalformedURLException {
+       DefaultComboBoxModel<String> spacesComboBoxModel = new DefaultComboBoxModel<String>();
+        for(Pictures p: da.getImages(actualSpace)) {
+            spacesComboBoxModel.addElement(String.valueOf(p.getName()));
+        }
+        lstImages.setModel(spacesComboBoxModel); 
+    }
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -494,7 +584,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblSpaceName;
     private javax.swing.JLabel lblType;
     private javax.swing.JLabel lblWeb;
-    private javax.swing.JList<String> lstSpaces;
+    private javax.swing.JList<String> lstImages;
     private javax.swing.JScrollPane scpDescription;
     private javax.swing.JScrollPane scpImagen;
     private javax.swing.JTextArea txaDescription;
