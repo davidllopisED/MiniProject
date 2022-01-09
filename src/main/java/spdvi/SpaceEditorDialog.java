@@ -39,6 +39,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
     boolean visible = false;
     Spaces actualSpace;
     private Thread downloadThread;
+    SpaceFrame spaceFrame;
     
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
@@ -51,6 +52,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
         super(parent, modal);
         initComponents();
         setResizable(false);
+        spaceFrame = (SpaceFrame) this.getParent();
         try {
             properties.load(SpaceFrame.class.getClassLoader().getResourceAsStream("BlobService.properties"));
             blobServiceClient = new BlobServiceClientBuilder().connectionString(properties.getProperty("connection")).buildClient();
@@ -459,7 +461,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
         //En esta parte se hace el insert de la informacion con respecto a loc campos indicados
         //o en su contrario es posible hacer los inserts en las partes pertinentes quitando el autocommit y en esta parte hacer el commit final
         Spaces newSpace = new Spaces(
-                "0", 
+                getActualSpace().getFk_id_registre(), 
                 txtSpaceName.getText(), 
                 txaDescription.getText(),
                 txtMunicipio.getText(), 
@@ -475,7 +477,8 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
         );
         
         DataAccess da = new DataAccess();
-           da.insertSpace(newSpace);
+        da.actualizarSpace(newSpace);
+        spaceFrame.UpdateSpaceListView();
         this.setVisible(false); 
     }//GEN-LAST:event_btnAcceptActionPerformed
 

@@ -326,6 +326,40 @@ public class DataAccess {
         return 0;
     }
     
+    public int actualizarSpace (Spaces s) {
+        try (Connection connection = getConnection()) {
+        PreparedStatement updateStatement = connection.prepareStatement(
+        "UPDATE dbo.espai set nom = ?, descripcions = ?, municipi = ?, adreca = ?,"
+                + " email = ?, web = ?, telefon = ?, tipus = ?, modalitats = ?,"
+                + " gestor = ?, serveis = ?, visible = ? WHERE registre = ?;"
+        );
+        
+        updateStatement.setString(1, s.getNom());
+        updateStatement.setString(2, s.getDescripcions());
+        updateStatement.setString(3, s.getMunicipi());
+        updateStatement.setString(4, s.getAdreca());
+        updateStatement.setString(5, s.getEmail());
+        updateStatement.setString(6, s.getWeb());
+        updateStatement.setInt(7, s.getTelefon());
+        updateStatement.setString(8, s.getTipus());
+        updateStatement.setString(9, s.getModalitats());
+        updateStatement.setString(10, s.getGestor());
+        updateStatement.setString(11, s.getServeis());
+        updateStatement.setBoolean(12, s.isVisible());
+        updateStatement.setString(13, s.getFk_id_registre());
+        
+        int result = updateStatement.executeUpdate();
+        
+        if(result == 0) {
+            System.out.println("No se ha actualizado nada");
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return 0;
+    }
+    
     public int newRegistre(){
         try (Connection connection = getConnection()) {
                 PreparedStatement selectStatetement = connection.prepareStatement(
