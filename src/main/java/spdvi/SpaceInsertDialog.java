@@ -375,8 +375,9 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         //En esta parte se hace el insert de la informacion con respecto a loc campos indicados
         //o en su contrario es posible hacer los inserts en las partes pertinentes quitando el autocommit y en esta parte hacer el commit final
+        DataAccess dataAccess = new DataAccess();
         Spaces newSpace = new Spaces(
-                "0", 
+                0, 
                 txtSpaceName.getText(), 
                 txaDescription.getText(),
                 txtMunicipio.getText(), 
@@ -394,19 +395,21 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         
         try {
             if (ImageChoosen) {
-                da.insertImage(fileChooser.getSelectedFile().getAbsolutePath());
+                dataAccess.insertImage(fileChooser.getSelectedFile().getAbsolutePath());
+                dataAccess.imageRegistre(newSpace);
             }
             else {
-                
-                da.insertImage(noImage);
+                dataAccess.insertImage(noImage);
+                dataAccess.imageRegistre(newSpace);
             }
         }
         catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             ex.printStackTrace();
         }
-        DataAccess da = new DataAccess();
-           da.insertSpace(newSpace);
+        
+           dataAccess.insertSpace(newSpace);
+           
         this.setVisible(false); 
     }//GEN-LAST:event_btnAcceptActionPerformed
 

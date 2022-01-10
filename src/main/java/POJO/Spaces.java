@@ -10,14 +10,14 @@ package POJO;
  * @author Alumne
  */
 public class Spaces {
-    private String fk_id_registre, nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis;
-    private int telefon;
+    private String  nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis;
+    private int telefon, fk_id_registre;
     private boolean visible;
     
     public Spaces() {
     }
 
-    public Spaces(String fk_id_registre, String nom, String descripcions, String municipi, String adreca, String email, String web, String tipus, String modalitats, String gestor, String serveis, int telefon, boolean visible) {
+    public Spaces(int fk_id_registre, String nom, String descripcions, String municipi, String adreca, String email, String web, String tipus, String modalitats, String gestor, String serveis, int telefon, boolean visible) {
         this.fk_id_registre = fk_id_registre;
         this.nom = nom;
         this.descripcions = descripcions;
@@ -33,11 +33,11 @@ public class Spaces {
         this.visible = visible;
     }
 
-    public String getFk_id_registre() {
+    public int getFk_id_registre() {
         return fk_id_registre;
     }
 
-    public void setFk_id_registre(String fk_id_registre) {
+    public void setFk_id_registre(int fk_id_registre) {
         this.fk_id_registre = fk_id_registre;
     }
 
