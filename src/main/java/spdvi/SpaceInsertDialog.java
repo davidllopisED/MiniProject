@@ -381,6 +381,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         //En esta parte se hace el insert de la informacion con respecto a loc campos indicados
         //o en su contrario es posible hacer los inserts en las partes pertinentes quitando el autocommit y en esta parte hacer el commit final
+        DataAccess dataAccess = new DataAccess();
         Spaces newSpace = new Spaces(
                 da.newRegistre("espai"), 
                 txtSpaceName.getText(), 
@@ -401,6 +402,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         
         
         try {
+
             if (!Imagenes.isEmpty()) {
                 for(String imagen: Imagenes) {
                     Pictures newPicture = new Pictures(da.newRegistre("imatges"), imagen);
@@ -413,12 +415,14 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
                 
                 //La imagen default tiene como id 0
                 da.insertRelation(newSpace.getFk_id_registre(), 0);
+
             }
         }
         catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             ex.printStackTrace();
         }
+
         this.setVisible(false); 
     }//GEN-LAST:event_btnAcceptActionPerformed
 

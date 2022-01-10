@@ -187,15 +187,52 @@ public class DataAccess {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "INSERT INTO dbo.imatges (id_imatge, Name)" 
+
             + "VALUES (?, ?)"
             );
            
             insertStatement.setInt(1, newPicture.getId());
             insertStatement.setString(2, newPicture.getName());
+
             
             int result = insertStatement.executeUpdate();
             
             return result;
+        }catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+    public int imageRegistre(Spaces spaces) {
+        
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "INSERT INTO dbo.espai_imatge (fk_registre, fk_id_imatge)" 
+            + "VALUES (?,?)"
+            );
+            insertStatement.setInt(1, spaces.getFk_id_registre());
+            insertStatement.setString(2, String.valueOf(newImage()));
+            int result = insertStatement.executeUpdate();
+            return result;
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return 0;
+    }
+    
+    public int newImage(){
+        try (Connection connection = getConnection()) {
+                PreparedStatement selectStatetement = connection.prepareStatement(
+                        "SELECT MAX(id_imatge) AS newId FROM dbo.imatges"
+                );
+                ResultSet resultSet = selectStatetement.executeQuery();
+                if (!resultSet.next()) {
+                    return 0;
+                }
+                int maxregistre = resultSet.getInt("newId") + 1;
+                
+                return maxregistre;
         }catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -285,7 +322,9 @@ public class DataAccess {
         return 0;
     }
     
-    public int deleteSpace(int registre) {
+
+    public int deleteSpace(Integer registre) {
+
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "DELETE FROM dbo.espai WHERE registre = ?;"
@@ -303,7 +342,7 @@ public class DataAccess {
         }
         return 0;
     }
-    
+
     public int insertRelation(int idEspacio, int idImagen) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
@@ -325,6 +364,7 @@ public class DataAccess {
     }
     
     public int deleteRelation(int registre) {
+
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "DELETE FROM dbo.espai_imatge WHERE fk_registre = ?;"
