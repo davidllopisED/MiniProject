@@ -272,6 +272,58 @@ public class DataAccess {
     return spaces;
     }
     
+    public ArrayList<Spaces> getSpacesFilter(boolean admin, String filtro, String search) {
+        ArrayList<Spaces> spaces = new ArrayList<>();
+        String columna = "";
+        switch(filtro) {
+            case "Nombre" -> {columna = "nom";}
+            case "Municipio" -> {columna = "municipi";}
+            case "Direccion" -> {columna = "adreca";}
+            case "Tipo" -> {columna = "tipus";}
+            case "Servicio" -> {columna = "serveis";}
+            case"Modalidad" -> {columna = "modalitats";}
+        }
+        
+        try (Connection connection = getConnection()){
+             PreparedStatement selectStatement;
+            if(!admin) {
+                selectStatement = 
+                    connection.prepareStatement(
+                            "SELECT * FROM dbo.espai WHERE " + columna + " LIKE '%" + search +"%' AND visible = 'True';"
+                    );
+            } else {
+                selectStatement = 
+                    connection.prepareStatement(
+                            "SELECT * FROM dbo.espai WHERE " + columna + " LIKE '%" + search +"%';"
+                    );
+            }
+            
+            ResultSet resultSet = selectStatement.executeQuery();
+            while (resultSet.next()) {                
+                Spaces space = new Spaces(
+                        resultSet.getInt("registre"),
+                        resultSet.getString("nom"),
+                        resultSet.getString("descripcions"),
+                        resultSet.getString("municipi"),
+                        resultSet.getString("adreca"),
+                        resultSet.getString("email"),
+                        resultSet.getString("web"),
+                        resultSet.getString("tipus"),
+                        resultSet.getString("modalitats"),
+                        resultSet.getString("gestor"),
+                        resultSet.getString("serveis"),
+                        resultSet.getInt("telefon"),
+                        resultSet.getBoolean("visible")
+                );
+                spaces.add(space);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Esta vacio");
+        }
+    return spaces;
+    }
+    
     public int insertUser(Users newUser) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(

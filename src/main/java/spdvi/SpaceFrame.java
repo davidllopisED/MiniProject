@@ -10,6 +10,7 @@ import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -453,91 +454,12 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         DefaultListModel<String> defaultListModel = new DefaultListModel<>();
         String search = txtSearch.getText();
         String elemento = cmbElemento.getSelectedItem().toString();
-
-        //DefaultListModel defaultListModel1 = new DefaultListModel();
-        /*for (BlobItem blobItem : containerClient.listBlobs()) {
-            defaultListModel.addElement(blobItem.getName());
-        }
-        lstSpacesName.setModel(defaultListModel);*/
+        ArrayList<Spaces> filteredSpaces = new ArrayList<>();
         
+        filteredSpaces = da.getSpacesFilter(actualUser.isAdmin(), elemento, search);
         
-        for (Spaces s: da.getSpaces()) {
-            
-            switch(elemento){
-            case "Nombre" -> {
-                if(s.getNom().equals(search)){
-                    if (!actualUser.isAdmin()){
-                        if(s.isVisible()){
-                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                        }
-                    }
-                    else {
-                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                    }
-                }
-            }
-            case "Municipio" -> {
-                if(s.getMunicipi().equals(search)){
-                    if (!actualUser.isAdmin()){
-                        if(s.isVisible()){
-                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                        }
-                    }
-                    else {
-                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                    }
-                }
-                }
-            case "Direccion" -> {
-                if(s.getAdreca().equals(search)){
-                    if (!actualUser.isAdmin()){
-                        if(s.isVisible()){
-                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                        }
-                    }
-                    else {
-                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                    }
-                }  
-            }
-            case "Tipo" -> {
-                if(s.getTipus().equals(search)){
-                    if (!actualUser.isAdmin()){
-                        if(s.isVisible()){
-                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                        }
-                    }
-                    else {
-                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                    }
-                } 
-            }
-            case "Servicio" -> {
-                if(s.getServeis().equals(search)){
-                    if (!actualUser.isAdmin()){
-                        if(s.isVisible()){
-                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                        }
-                    }
-                    else {
-                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                    }
-                }
-            }
-            case"Modalidad" -> {
-                if(s.getModalitats().equals(search)){
-                    if (!actualUser.isAdmin()){
-                        if(s.isVisible()){
-                            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                        }
-                    }
-                    else {
-                    defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
-                    }
-                }   
-            }
-        }
-                     
+        for(Spaces s: filteredSpaces) {
+            defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
         }
         
         lstSpacesName.setModel(defaultListModel); 
