@@ -321,6 +321,11 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
         jMenu1.add(mniAllSpaces);
 
         mniExit.setText("Exit");
+        mniExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniExitActionPerformed(evt);
+            }
+        });
         jMenu1.add(mniExit);
 
         jMenuBar1.add(jMenu1);
@@ -558,6 +563,11 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         UpdateSpaceListView();
     }//GEN-LAST:event_formWindowOpened
+
+    private void mniExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniExitActionPerformed
+        // TODO add your handling code here:
+        System.exit(4);
+    }//GEN-LAST:event_mniExitActionPerformed
     
     @Override
     public void run() {

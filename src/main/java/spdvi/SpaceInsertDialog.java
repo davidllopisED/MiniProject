@@ -33,6 +33,7 @@ import static spdvi.SpaceFrame.actualUser;
  * @author bryan
  */
 public class SpaceInsertDialog extends javax.swing.JDialog {
+    private final SpaceFrame spaceFrame;
     DataAccess da = new DataAccess();
     boolean visible = false;
     boolean ImageChoosen = false;
@@ -53,6 +54,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setResizable(false);
+        spaceFrame = (SpaceFrame) this.getParent();
         try {
             properties.load(SpaceFrame.class.getClassLoader().getResourceAsStream("BlobService.properties"));
             blobServiceClient = new BlobServiceClientBuilder().connectionString(properties.getProperty("connection")).buildClient();
@@ -178,6 +180,11 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         });
 
         btnRemove.setText("Quitar");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
 
         chbMostrar.setText("Mostrar");
         chbMostrar.addActionListener(new java.awt.event.ActionListener() {
@@ -371,7 +378,24 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_txtImagenNameFocusGained
 
     private void lstImagesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstImagesValueChanged
-       
+       String selectedImagen = lstImages.getSelectedValue();
+       File imagePath;
+        if (selectedImagen != null) {
+            for (int i = 0; i < Imagenes.size() ; i++) {
+            if (Imagenes.get(i).equals(selectedImagen)) {
+                imagePath = ImageFile.get(i);
+                BufferedImage bufferedImage;
+                try {
+                    bufferedImage = ImageIO.read(imagePath);
+                    ImageIcon icon = da.resizeImageIcon(bufferedImage, lblImage.getWidth(), lblImage.getHeight());
+                    lblImage.setIcon(icon);
+                } catch (IOException ex) {
+                    Logger.getLogger(SpaceInsertDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        }               
+        }    
     }//GEN-LAST:event_lstImagesValueChanged
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
@@ -437,6 +461,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
             ex.printStackTrace();
         }
 
+        spaceFrame.UpdateSpaceListView();
         this.setVisible(false); 
     }//GEN-LAST:event_btnAcceptActionPerformed
 
@@ -450,6 +475,25 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_chbMostrarActionPerformed
 
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+        
+        String imagenSelected = lstImages.getSelectedValue();
+        if (imagenSelected  != null) {
+            
+        
+        for (int i = 0; i < Imagenes.size() ; i++) {
+            if (Imagenes.get(i).equals(imagenSelected)) {
+                Imagenes.remove(i);
+                ImageFile.remove(i);
+            }
+        }
+        defaultListModel.removeElement(imagenSelected); 
+        lstImages.setModel(defaultListModel);  
+    }
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
