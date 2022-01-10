@@ -167,7 +167,7 @@ public class DataAccess {
                             "SELECT id_imatge, Name FROM dbo.imatges join dbo.espai_imatge on (dbo.espai_imatge.fk_id_imatge = dbo.imatges.id_imatge) WHERE fk_registre = ?;"
                     );
             
-            selectStatement.setString(1, espacio.getFk_id_registre());
+            selectStatement.setInt(1, espacio.getFk_id_registre());
             ResultSet resultSet = selectStatement.executeQuery();
                 while (resultSet.next()) {
                     String Name = resultSet.getString("Name");
@@ -183,27 +183,18 @@ public class DataAccess {
         return pictures;
     }
     
-    public int insertImage(String newPicture) {
+    public int insertImage(Pictures newPicture) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
-            "INSERT INTO dbo.imatges (Name)" 
-            + "VALUES (?)"
+            "INSERT INTO dbo.imatges (id_imatge, Name)" 
+            + "VALUES (?, ?)"
             );
            
-            insertStatement.setString(1, newPicture);
+            insertStatement.setInt(1, newPicture.getId());
+            insertStatement.setString(2, newPicture.getName());
             
             int result = insertStatement.executeUpdate();
             
-            if (result > 0) {
-                PreparedStatement selectStatetement = connection.prepareStatement(
-                        "SELECT MAX(id_imatge) AS newId FROM dbo.imatges"
-                );
-                ResultSet resultSet = selectStatetement.executeQuery();
-                if (!resultSet.next()) {
-                    return 0;
-                }
-                return resultSet.getInt("newId");
-            }
             return result;
         }catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
@@ -221,7 +212,7 @@ public class DataAccess {
             ResultSet resultSet = selectStatement.executeQuery();
             while (resultSet.next()) {                
                 Spaces space = new Spaces(
-                        resultSet.getString("registre"),
+                        resultSet.getInt("registre"),
                         resultSet.getString("nom"),
                         resultSet.getString("descripcions"),
                         resultSet.getString("municipi"),
@@ -294,13 +285,13 @@ public class DataAccess {
         return 0;
     }
     
-    public int deleteSpace(String registre) {
+    public int deleteSpace(int registre) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "DELETE FROM dbo.espai WHERE registre = ?;"
             );
 
-            insertStatement.setString(1, registre);
+            insertStatement.setInt(1, registre);
 
             int result = insertStatement.executeUpdate();
 
@@ -313,13 +304,33 @@ public class DataAccess {
         return 0;
     }
     
-    public int deleteRelation(String registre) {
+    public int insertRelation(int idEspacio, int idImagen) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "INSERT INTO dbo.espai_imatge (fk_registre, fk_id_imatge) VALUES (?, ?);"
+            );
+
+            insertStatement.setInt(1, idEspacio);
+            insertStatement.setInt(2, idImagen);
+
+            int result = insertStatement.executeUpdate();
+
+            if(result == 0) {
+                System.out.println("No se ha agregado nada");
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+    public int deleteRelation(int registre) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "DELETE FROM dbo.espai_imatge WHERE fk_registre = ?;"
             );
 
-            insertStatement.setString(1, registre);
+            insertStatement.setInt(1, registre);
 
             int result = insertStatement.executeUpdate();
 
@@ -374,7 +385,7 @@ public class DataAccess {
         updateStatement.setString(10, s.getGestor());
         updateStatement.setString(11, s.getServeis());
         updateStatement.setBoolean(12, s.isVisible());
-        updateStatement.setString(13, s.getFk_id_registre());
+        updateStatement.setInt(13, s.getFk_id_registre());
         
         int result = updateStatement.executeUpdate();
         
@@ -388,10 +399,15 @@ public class DataAccess {
         return 0;
     }
     
-    public int newRegistre(){
+    public int newRegistre(String tabla){
+        String columna = "";
+        if ("espai".equals(tabla)) columna = "registre";
+        else if ("imatges".equals(tabla)) columna = "id_imatge";
         try (Connection connection = getConnection()) {
+            
+            
                 PreparedStatement selectStatetement = connection.prepareStatement(
-                        "SELECT MAX(registre) AS newId FROM dbo.espai"
+                        "SELECT MAX(" + columna + ") AS newId FROM dbo." + tabla
                 );
                 ResultSet resultSet = selectStatetement.executeQuery();
                 if (!resultSet.next()) {
@@ -424,7 +440,7 @@ public class DataAccess {
             insertStatement.setString(10, newSpace.getServeis());
             insertStatement.setInt(11, newSpace.getTelefon());
             insertStatement.setBoolean(12, newSpace.isVisible());
-            insertStatement.setString(13, String.valueOf(newRegistre()));
+            insertStatement.setString(13, String.valueOf(newRegistre("espai")));
             
             int result = insertStatement.executeUpdate();
             
