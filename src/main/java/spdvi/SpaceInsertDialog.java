@@ -41,7 +41,9 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
     Properties properties = new Properties();
+    File imageFile;
     ArrayList<String> Imagenes = new ArrayList<>();
+    ArrayList<File> ImageFile = new ArrayList<>();
     DefaultListModel<String> defaultListModel = new DefaultListModel<>();
     //Create a unique name for the container
     /**
@@ -333,15 +335,26 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         
         int returnValue = fileChooser.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            BlobClient blobClient = containerClient.getBlobClient(fileChooser.getSelectedFile().getName());
+            
             txtImagenName.setText(fileChooser.getSelectedFile().getAbsolutePath()); //El nombre lo pone
             try {
-                BufferedImage bufferedImage = ImageIO.read(fileChooser.getSelectedFile().getAbsoluteFile());
+                imageFile = fileChooser.getSelectedFile().getAbsoluteFile();
+                
                 BufferedImage bufferedImagePath = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath())); 
                 ImageIcon icon = da.resizeImageIcon(bufferedImagePath, lblImage.getWidth(), lblImage.getHeight());
                 lblImage.setIcon(icon);
                 ImageChoosen = true;
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_btnOpenActionPerformed
+
+    private void UploadImagen(String imageName, File fileImagen) throws IOException {
+        BlobClient blobClient = containerClient.getBlobClient(imageName);
+        BufferedImage bufferedImage = ImageIO.read(fileImagen);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 ImageIO.write(bufferedImage, "jpg", baos);
                 ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
                 blobClient.upload(bais, baos.size());  // Thread blocking
@@ -350,12 +363,8 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
                 blobClient.setHttpHeaders(headers);
                 baos.close();
                 bais.close();
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
-        }
-    }//GEN-LAST:event_btnOpenActionPerformed
-
+    }
+    
     private void txtImagenNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImagenNameFocusGained
         // TODO add your handling code here:
         txtImagenName.selectAll();
@@ -369,6 +378,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         String nombreImagen = fileChooser.getSelectedFile().getName();
         Imagenes.add(nombreImagen);
+        ImageFile.add(imageFile);
         UpdateSpaceListView(nombreImagen);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -381,7 +391,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         //En esta parte se hace el insert de la informacion con respecto a loc campos indicados
         //o en su contrario es posible hacer los inserts en las partes pertinentes quitando el autocommit y en esta parte hacer el commit final
-        DataAccess dataAccess = new DataAccess();
+        
         Spaces newSpace = new Spaces(
                 da.newRegistre("espai"), 
                 txtSpaceName.getText(), 
@@ -404,6 +414,10 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         try {
 
             if (!Imagenes.isEmpty()) {
+                for(int i = 0; i < Imagenes.size(); i++) {
+                    UploadImagen(Imagenes.get(i), ImageFile.get(i));
+                }
+                
                 for(String imagen: Imagenes) {
                     Pictures newPicture = new Pictures(da.newRegistre("imatges"), imagen);
                     da.insertImage(newPicture);
