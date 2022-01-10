@@ -22,15 +22,18 @@ import com.azure.storage.blob.models.BlobHttpHeaders;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Properties;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import static spdvi.SpaceFrame.actualUser;
 
 /**
  *
  * @author bryan
  */
 public class SpaceInsertDialog extends javax.swing.JDialog {
-    DataAccess da;
+    DataAccess da = new DataAccess();
     boolean visible = false;
     boolean ImageChoosen = false;
     JFileChooser fileChooser = new JFileChooser();
@@ -38,6 +41,8 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
     Properties properties = new Properties();
+    ArrayList<String> Imagenes = new ArrayList<>();
+    DefaultListModel<String> defaultListModel = new DefaultListModel<>();
     //Create a unique name for the container
     /**
      * Creates new form SpaceEditorDialog
@@ -68,7 +73,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         btnOpen = new javax.swing.JButton();
         txtImagenName = new javax.swing.JTextField();
         scpImagen = new javax.swing.JScrollPane();
-        lstSpaces = new javax.swing.JList<>();
+        lstImages = new javax.swing.JList<>();
         btnAgregar = new javax.swing.JButton();
         lblSpaceName = new javax.swing.JLabel();
         txtSpaceName = new javax.swing.JTextField();
@@ -108,6 +113,9 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
             }
         });
 
+        txtImagenName.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtImagenName.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtImagenName.setMaximumSize(new java.awt.Dimension(15, 24));
         txtImagenName.setName(""); // NOI18N
         txtImagenName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -115,12 +123,12 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
             }
         });
 
-        lstSpaces.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        lstImages.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstSpacesValueChanged(evt);
+                lstImagesValueChanged(evt);
             }
         });
-        scpImagen.setViewportView(lstSpaces);
+        scpImagen.setViewportView(lstImages);
 
         btnAgregar.setText("Agregar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -187,20 +195,23 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(txtPhone, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(scpImagen, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtImagenName))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
-                                .addComponent(btnOpen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addComponent(lblImage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblWeb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtWeb, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addComponent(txtWeb, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(scpImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtImagenName, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnOpen, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblWeb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblImage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(9, 9, 9)))
                     .addComponent(lblPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -319,27 +330,14 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         // TODO add your handling code here:
         
-        /*int returnOption = fileChooser.showOpenDialog(this);
-        if (returnOption == JFileChooser.APPROVE_OPTION){
-            BufferedImage bufferedImage;
-            try {
-                bufferedImage = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath()));
-                ImageIcon icon = da.resizeImageIcon(bufferedImage, lblImage.getWidth(), lblImage.getHeight());
-                lblImage.setIcon(icon);
-            } catch (IOException ex) {
-                Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //"\\AppData\\Local\\UserList2\\images\\" 
-        }*/
         
-        //PARTE DE REVISION
         int returnValue = fileChooser.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             BlobClient blobClient = containerClient.getBlobClient(fileChooser.getSelectedFile().getName());
             txtImagenName.setText(fileChooser.getSelectedFile().getAbsolutePath()); //El nombre lo pone
             try {
                 BufferedImage bufferedImage = ImageIO.read(fileChooser.getSelectedFile().getAbsoluteFile());
-                BufferedImage bufferedImagePath = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath())); //Pero no lo lee como imagen
+                BufferedImage bufferedImagePath = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath())); 
                 ImageIcon icon = da.resizeImageIcon(bufferedImagePath, lblImage.getWidth(), lblImage.getHeight());
                 lblImage.setIcon(icon);
                 ImageChoosen = true;
@@ -363,21 +361,29 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         txtImagenName.selectAll();
     }//GEN-LAST:event_txtImagenNameFocusGained
 
-    private void lstSpacesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstSpacesValueChanged
+    private void lstImagesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstImagesValueChanged
        
-    }//GEN-LAST:event_lstSpacesValueChanged
+    }//GEN-LAST:event_lstImagesValueChanged
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         // TODO add your handling code here:
+        String nombreImagen = fileChooser.getSelectedFile().getName();
+        Imagenes.add(nombreImagen);
+        UpdateSpaceListView(nombreImagen);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    public void UpdateSpaceListView(String Imagen) {
+        defaultListModel.addElement(Imagen);  
+        lstImages.setModel(defaultListModel);      
+    }
+    
     private void btnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptActionPerformed
         // TODO add your handling code here:
         //En esta parte se hace el insert de la informacion con respecto a loc campos indicados
         //o en su contrario es posible hacer los inserts en las partes pertinentes quitando el autocommit y en esta parte hacer el commit final
         DataAccess dataAccess = new DataAccess();
         Spaces newSpace = new Spaces(
-                0, 
+                da.newRegistre("espai"), 
                 txtSpaceName.getText(), 
                 txaDescription.getText(),
                 txtMunicipio.getText(), 
@@ -392,24 +398,31 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
                 chbMostrar.isSelected()
         );
         
+        da.insertSpace(newSpace);
+        
         
         try {
-            if (ImageChoosen) {
-                dataAccess.insertImage(fileChooser.getSelectedFile().getAbsolutePath());
-                dataAccess.imageRegistre(newSpace);
+
+            if (!Imagenes.isEmpty()) {
+                for(String imagen: Imagenes) {
+                    Pictures newPicture = new Pictures(da.newRegistre("imatges"), imagen);
+                    da.insertImage(newPicture);
+                    da.insertRelation(newSpace.getFk_id_registre(), newPicture.getId());
+                }
+                
             }
             else {
-                dataAccess.insertImage(noImage);
-                dataAccess.imageRegistre(newSpace);
+                
+                //La imagen default tiene como id 0
+                da.insertRelation(newSpace.getFk_id_registre(), 0);
+
             }
         }
         catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
             ex.printStackTrace();
         }
-        
-           dataAccess.insertSpace(newSpace);
-           
+
         this.setVisible(false); 
     }//GEN-LAST:event_btnAcceptActionPerformed
 
@@ -485,7 +498,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblSpaceName;
     private javax.swing.JLabel lblType;
     private javax.swing.JLabel lblWeb;
-    private javax.swing.JList<String> lstSpaces;
+    private javax.swing.JList<String> lstImages;
     private javax.swing.JScrollPane scpDescription;
     private javax.swing.JScrollPane scpImagen;
     private javax.swing.JTextArea txaDescription;

@@ -183,27 +183,20 @@ public class DataAccess {
         return pictures;
     }
     
-    public int insertImage(String newPicture) {
+    public int insertImage(Pictures newPicture) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "INSERT INTO dbo.imatges (id_imatge, Name)" 
-            + "VALUES (?,?)"
+
+            + "VALUES (?, ?)"
             );
-            insertStatement.setString(1, String.valueOf(newImage()));
-            insertStatement.setString(2, newPicture);
+           
+            insertStatement.setInt(1, newPicture.getId());
+            insertStatement.setString(2, newPicture.getName());
+
             
             int result = insertStatement.executeUpdate();
             
-            if (result > 0) {
-                PreparedStatement selectStatetement = connection.prepareStatement(
-                        "SELECT MAX(id_imatge) AS newId FROM dbo.imatges"
-                );
-                ResultSet resultSet = selectStatetement.executeQuery();
-                if (!resultSet.next()) {
-                    return 0;
-                }
-                return resultSet.getInt("newId");
-            }
             return result;
         }catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
@@ -329,7 +322,9 @@ public class DataAccess {
         return 0;
     }
     
+
     public int deleteSpace(Integer registre) {
+
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "DELETE FROM dbo.espai WHERE registre = ?;"
@@ -347,8 +342,29 @@ public class DataAccess {
         }
         return 0;
     }
+
+    public int insertRelation(int idEspacio, int idImagen) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "INSERT INTO dbo.espai_imatge (fk_registre, fk_id_imatge) VALUES (?, ?);"
+            );
+
+            insertStatement.setInt(1, idEspacio);
+            insertStatement.setInt(2, idImagen);
+
+            int result = insertStatement.executeUpdate();
+
+            if(result == 0) {
+                System.out.println("No se ha agregado nada");
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
     
-    public int deleteRelation(Integer registre) {
+    public int deleteRelation(int registre) {
+
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "DELETE FROM dbo.espai_imatge WHERE fk_registre = ?;"
@@ -423,10 +439,15 @@ public class DataAccess {
         return 0;
     }
     
-    public int newRegistre(){
+    public int newRegistre(String tabla){
+        String columna = "";
+        if ("espai".equals(tabla)) columna = "registre";
+        else if ("imatges".equals(tabla)) columna = "id_imatge";
         try (Connection connection = getConnection()) {
+            
+            
                 PreparedStatement selectStatetement = connection.prepareStatement(
-                        "SELECT MAX(registre) AS newId FROM dbo.espai"
+                        "SELECT MAX(" + columna + ") AS newId FROM dbo." + tabla
                 );
                 ResultSet resultSet = selectStatetement.executeQuery();
                 if (!resultSet.next()) {
@@ -459,7 +480,7 @@ public class DataAccess {
             insertStatement.setString(10, newSpace.getServeis());
             insertStatement.setInt(11, newSpace.getTelefon());
             insertStatement.setBoolean(12, newSpace.isVisible());
-            insertStatement.setString(13, String.valueOf(newRegistre()));
+            insertStatement.setString(13, String.valueOf(newRegistre("espai")));
             
             int result = insertStatement.executeUpdate();
             

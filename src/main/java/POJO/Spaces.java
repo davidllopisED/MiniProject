@@ -10,8 +10,10 @@ package POJO;
  * @author Alumne
  */
 public class Spaces {
-    private String  nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis;
-    private int telefon, fk_id_registre;
+
+    private String nom, descripcions, municipi, adreca, email, web, tipus, modalitats, gestor, serveis;
+    private int fk_id_registre, telefon;
+
     private boolean visible;
     
     public Spaces() {
