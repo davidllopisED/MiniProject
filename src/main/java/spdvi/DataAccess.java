@@ -167,7 +167,7 @@ public class DataAccess {
                             "SELECT id_imatge, Name FROM dbo.imatges join dbo.espai_imatge on (dbo.espai_imatge.fk_id_imatge = dbo.imatges.id_imatge) WHERE fk_registre = ?;"
                     );
             
-            selectStatement.setString(1, espacio.getFk_id_registre());
+            selectStatement.setInt(1, espacio.getFk_id_registre());
             ResultSet resultSet = selectStatement.executeQuery();
                 while (resultSet.next()) {
                     String Name = resultSet.getString("Name");
@@ -186,11 +186,11 @@ public class DataAccess {
     public int insertImage(String newPicture) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
-            "INSERT INTO dbo.imatges (Name)" 
-            + "VALUES (?)"
+            "INSERT INTO dbo.imatges (id_imatge, Name)" 
+            + "VALUES (?,?)"
             );
-           
-            insertStatement.setString(1, newPicture);
+            insertStatement.setString(1, String.valueOf(newImage()));
+            insertStatement.setString(2, newPicture);
             
             int result = insertStatement.executeUpdate();
             
@@ -211,6 +211,41 @@ public class DataAccess {
         return 0;
     }
     
+    public int imageRegistre(Spaces spaces) {
+        
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "INSERT INTO dbo.espai_imatge (fk_registre, fk_id_imatge)" 
+            + "VALUES (?,?)"
+            );
+            insertStatement.setInt(1, spaces.getFk_id_registre());
+            insertStatement.setString(2, String.valueOf(newImage()));
+            int result = insertStatement.executeUpdate();
+            return result;
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    return 0;
+    }
+    
+    public int newImage(){
+        try (Connection connection = getConnection()) {
+                PreparedStatement selectStatetement = connection.prepareStatement(
+                        "SELECT MAX(id_imatge) AS newId FROM dbo.imatges"
+                );
+                ResultSet resultSet = selectStatetement.executeQuery();
+                if (!resultSet.next()) {
+                    return 0;
+                }
+                int maxregistre = resultSet.getInt("newId") + 1;
+                
+                return maxregistre;
+        }catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
     public ArrayList<Spaces> getSpaces() {
         ArrayList<Spaces> spaces = new ArrayList<>();
         try (Connection connection = getConnection()){
@@ -221,7 +256,7 @@ public class DataAccess {
             ResultSet resultSet = selectStatement.executeQuery();
             while (resultSet.next()) {                
                 Spaces space = new Spaces(
-                        resultSet.getString("registre"),
+                        resultSet.getInt("registre"),
                         resultSet.getString("nom"),
                         resultSet.getString("descripcions"),
                         resultSet.getString("municipi"),
@@ -294,13 +329,13 @@ public class DataAccess {
         return 0;
     }
     
-    public int deleteSpace(String registre) {
+    public int deleteSpace(Integer registre) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "DELETE FROM dbo.espai WHERE registre = ?;"
             );
 
-            insertStatement.setString(1, registre);
+            insertStatement.setInt(1, registre);
 
             int result = insertStatement.executeUpdate();
 
@@ -313,13 +348,13 @@ public class DataAccess {
         return 0;
     }
     
-    public int deleteRelation(String registre) {
+    public int deleteRelation(Integer registre) {
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
             "DELETE FROM dbo.espai_imatge WHERE fk_registre = ?;"
             );
 
-            insertStatement.setString(1, registre);
+            insertStatement.setInt(1, registre);
 
             int result = insertStatement.executeUpdate();
 
@@ -374,7 +409,7 @@ public class DataAccess {
         updateStatement.setString(10, s.getGestor());
         updateStatement.setString(11, s.getServeis());
         updateStatement.setBoolean(12, s.isVisible());
-        updateStatement.setString(13, s.getFk_id_registre());
+        updateStatement.setInt(13, s.getFk_id_registre());
         
         int result = updateStatement.executeUpdate();
         
