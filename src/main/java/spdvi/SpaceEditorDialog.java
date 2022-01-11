@@ -27,8 +27,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -40,10 +43,14 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
     Spaces actualSpace;
     private Thread downloadThread;
     SpaceFrame spaceFrame;
-    
+    JFileChooser fileChooser = new JFileChooser();
+    File imageFile;
+    ArrayList<String> Imagenes = new ArrayList<>();
+    ArrayList<File> ImageFile = new ArrayList<>();
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
     Properties properties = new Properties();
+    DefaultListModel<String> defaultListModel = new DefaultListModel<>();
     //Create a unique name for the container
     /**
      * Creates new form SpaceEditorDialog
@@ -196,6 +203,11 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
         });
 
         btnRemove.setText("Quitar");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
 
         chbMostrar.setText("Mostrar");
         chbMostrar.addActionListener(new java.awt.event.ActionListener() {
@@ -346,7 +358,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         // TODO add your handling code here:
-        JFileChooser fileChooser = new JFileChooser();
+        
         /*int returnOption = fileChooser.showOpenDialog(this);
         if (returnOption == JFileChooser.APPROVE_OPTION){
             BufferedImage bufferedImage;
@@ -453,9 +465,26 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
     }
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
+        String nombreImagen = fileChooser.getSelectedFile().getName();
+        Imagenes.add(nombreImagen);
+        ImageFile.add(imageFile);
+        UpdateSpaceListView(nombreImagen);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    private void UploadImagen(String imageName, File fileImagen) throws IOException {
+        BlobClient blobClient = containerClient.getBlobClient(imageName);
+        BufferedImage bufferedImage = ImageIO.read(fileImagen);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(bufferedImage, "jpg", baos);
+                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+                blobClient.upload(bais, baos.size());  // Thread blocking
+                BlobHttpHeaders headers = new BlobHttpHeaders();
+                headers.setContentType("image/jpeg");
+                blobClient.setHttpHeaders(headers);
+                baos.close();
+                bais.close();
+    }
+    
     private void btnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptActionPerformed
         // TODO add your handling code here:
         //En esta parte se hace el insert de la informacion con respecto a loc campos indicados
@@ -478,6 +507,31 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
         
         DataAccess da = new DataAccess();
         da.actualizarSpace(newSpace);
+        try {
+
+            if (!Imagenes.isEmpty()) {
+                for(int i = 0; i < Imagenes.size(); i++) {
+                    UploadImagen(Imagenes.get(i), ImageFile.get(i));
+                }
+                
+                for(String imagen: Imagenes) {
+                    Pictures newPicture = new Pictures(da.newRegistre("imatges"), imagen);
+                    da.insertImage(newPicture);
+                    da.insertRelation(newSpace.getFk_id_registre(), newPicture.getId());
+                }
+                
+            }
+            else {
+                
+                //La imagen default tiene como id 0
+                da.insertRelation(newSpace.getFk_id_registre(), 0);
+
+            }
+        }
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            ex.printStackTrace();
+        }
         spaceFrame.UpdateSpaceListView();
         this.setVisible(false); 
     }//GEN-LAST:event_btnAcceptActionPerformed
@@ -513,6 +567,27 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
         }
     }//GEN-LAST:event_formWindowOpened
 
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        String imagenSelected = lstImages.getSelectedValue();
+        if (imagenSelected  != null) {
+            
+        
+        for (int i = 0; i < Imagenes.size() ; i++) {
+            if (Imagenes.get(i).equals(imagenSelected)) {
+                Imagenes.remove(i);
+                ImageFile.remove(i);
+            }
+        }
+        defaultListModel.removeElement(imagenSelected); 
+        lstImages.setModel(defaultListModel);  
+    }
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    public void UpdateSpaceListView(String Imagen) {
+        defaultListModel.addElement(Imagen);  
+        lstImages.setModel(defaultListModel);      
+    }
+    
     private void UpdateImagenJList(Spaces actualSpace) throws MalformedURLException {
        DefaultComboBoxModel<String> spacesComboBoxModel = new DefaultComboBoxModel<String>();
         for(Pictures p: da.getImages(actualSpace)) {
