@@ -26,12 +26,16 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import POJO.Spaces;
 import com.azure.core.util.Context;
+import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.models.BlobHttpHeaders;
+import com.azure.storage.blob.models.BlobItem;
 import com.azure.storage.blob.models.BlobRange;
 import com.azure.storage.blob.models.DownloadRetryOptions;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
@@ -553,6 +557,19 @@ public class DataAccess {
         return 0;
     }
     
+    public void UploadImagen(String imageName, File fileImagen, BlobContainerClient containerClient) throws IOException {
+        BlobClient blobClient = containerClient.getBlobClient(imageName);
+        BufferedImage bufferedImage = ImageIO.read(fileImagen);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(bufferedImage, "jpg", baos);
+                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+                blobClient.upload(bais, baos.size());  // Thread blocking
+                BlobHttpHeaders headers = new BlobHttpHeaders();
+                headers.setContentType("image/jpeg");
+                blobClient.setHttpHeaders(headers);
+                baos.close();
+                bais.close();
+    }
     
     public void downloadImage(BlobContainerClient containerClient, javax.swing.JProgressBar prgDownloadImage, javax.swing.JComboBox<String> cboImagen, javax.swing.JLabel lblImage) {
         // Downloading big images in chunks of 1kB might be very slow because of the request overhead to azure. Modify the algorithm to donwload eavery image in, for instance 20 chunks.
