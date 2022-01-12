@@ -128,7 +128,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
         txtGestor = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("SpaceInsert");
+        setTitle("SpaceEdit");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -569,8 +569,9 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
     }//GEN-LAST:event_formWindowOpened
 
     private void UpdateImagenJList(Spaces actualSpace) throws MalformedURLException {
-       
-        for(Pictures p: da.getImages(actualSpace)) {
+       DefaultComboBoxModel<String> spacesComboBoxModel = new DefaultComboBoxModel<String>();
+        for(Pictures p: da.getImages(actualSpace.getFk_id_registre())) {
+
             spacesComboBoxModel.addElement(String.valueOf(p.getName()));
         }
         lstImages.setModel(spacesComboBoxModel); 

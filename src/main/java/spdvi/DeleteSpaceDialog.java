@@ -4,8 +4,20 @@
  */
 package spdvi;
 
+import POJO.Pictures;
 import javax.swing.JComboBox;
 import POJO.Spaces;
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -16,6 +28,9 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
     private final SpaceFrame spaceFrame;
     private JComboBox<Spaces> comboBox;
     DataAccess da = new DataAccess();
+    private BlobServiceClient blobServiceClient;
+     private BlobContainerClient containerClient;
+     Properties properties = new Properties();
    
     /**
      * Creates new form DeleteObraDialog
@@ -27,6 +42,13 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
         spaceFrame = (SpaceFrame) this.getParent();
         comboBox = new JComboBox<Spaces>();
         jScrollPane1.setViewportView(comboBox);
+        try {
+            properties.load(SpaceFrame.class.getClassLoader().getResourceAsStream("BlobService.properties"));
+            blobServiceClient = new BlobServiceClientBuilder().connectionString(properties.getProperty("connection")).buildClient();
+            containerClient = blobServiceClient.getBlobContainerClient(properties.getProperty("containerName"));
+        } catch (IOException ex) {
+            Logger.getLogger(SpaceFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -88,9 +110,29 @@ public class DeleteSpaceDialog extends javax.swing.JDialog {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
        Spaces selectedSpaces = (Spaces) comboBox.getSelectedItem();
-       da.deleteRelation(selectedSpaces.getFk_id_registre());
+       ArrayList<Pictures> Imagenes = null;
+        try {
+            Imagenes = da.getImages(selectedSpaces.getFk_id_registre());
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(DeleteSpaceDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+       for(Pictures p: Imagenes) {
+           int contador = da.contadorImagen(p.getId());
+           da.deleteRelation(selectedSpaces.getFk_id_registre(), p.getId());
+           if(!(p.getId() == 0) && contador == 1){
+               try{
+               da.deleteImagen(p.getId());
+               BlobClient blobClient = containerClient.getBlobClient(p.getName());
+               blobClient.delete();
+               }catch(Exception e) {
+                   System.out.println("NO SE QUE HA PASADO");
+               }
+           }
+       }
        da.deleteSpace(selectedSpaces.getFk_id_registre());
        spaceFrame.UpdateSpaceListView();
+       spaceFrame.FlushSpaces();
        UpdateSpaceComboModel();
     }//GEN-LAST:event_btnDeleteActionPerformed
     

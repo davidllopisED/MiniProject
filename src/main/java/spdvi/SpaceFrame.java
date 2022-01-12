@@ -462,6 +462,7 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
             defaultListModel.addElement(s.getNom() + ", " + s.getAdreca());
         }
         
+        FlushSpaces();
         lstSpacesName.setModel(defaultListModel); 
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -471,8 +472,7 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
 
     private void cboImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboImagenActionPerformed
                                   
-
-        if (cboImagen.getSelectedItem() != null) {  //This line prevents double events when selecting by click
+        if (cboImagen.getSelectedItem() != null /*|| !(cboImagen.getSelectedItem().toString() == "Imagen")*/) {  //This line prevents double events when selecting by click
 //            System.out.println(Thread.currentThread().getName());
             downloadThread = new Thread(this);
             downloadThread.start();
@@ -519,13 +519,14 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
     private void lstSpacesNameValueChanged(javax.swing.event.ListSelectionEvent evt) {
         String selectedSpace = lstSpacesName.getSelectedValue();
         
-        if (!evt.getValueIsAdjusting()) {  //This line prevents double events when selecting by click
+        
+        if (selectedSpace != null) {
+            if (!evt.getValueIsAdjusting()) {  //This line prevents double events when selecting by click
             downloadThread = new Thread(this);
             downloadThread.start();
             lblImage.setText("");
             lblImage.setIcon(new ImageIcon(getClass().getResource("/gif/spinner.gif"))); //ESTA COMENTADA POR QUE ME DA ERROR
         }
-        if (selectedSpace != null) {
             String[] infoSpace = (selectedSpace.split(", "));
             for (Spaces s: da.getSpaces()) {
                 if(s.getNom().equals(infoSpace[0]) && s.getAdreca().equals(infoSpace[1])){
@@ -547,15 +548,31 @@ public class SpaceFrame extends javax.swing.JFrame implements Runnable {
                     }
                 }
         }          
-        }
+        } 
     }
     
-    
+    public void FlushSpaces(){
+        DefaultComboBoxModel<String> df = new DefaultComboBoxModel<String>();
+        df.addElement("Imagen");
+        lblImage.setIcon(null);
+        lblSpaceName.setText("");
+        txaDescription.setText("");
+        txtMunicipio.setText("");
+        txtDirection.setText("");
+        txtType.setText("");
+        txtService.setText("");
+        txtModalidad.setText("");
+        txtGestor.setText("");
+        lblEmailData.setText("");
+        lblWebData.setText("");
+        lblPhoneData.setText("");
+        cboImagen.setModel(df);
+    }
     
     private void UpdateImagenComboModel(Spaces espacios) throws MalformedURLException {
         
         DefaultComboBoxModel<String> spacesComboBoxModel = new DefaultComboBoxModel<String>();
-        for(Pictures p: da.getImages(espacios)) {
+        for(Pictures p: da.getImages(espacios.getFk_id_registre())) {
             spacesComboBoxModel.addElement(String.valueOf(p.getName()));
         }
         cboImagen.setModel(spacesComboBoxModel);

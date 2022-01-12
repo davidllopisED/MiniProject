@@ -38,7 +38,6 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
     boolean visible = false;
     boolean ImageChoosen = false;
     JFileChooser fileChooser = new JFileChooser();
-    private final String noImage = "imagenes/Pasillo.jpg";
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
     Properties properties = new Properties();
@@ -391,7 +390,9 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         String nombreImagen = fileChooser.getSelectedFile().getName();
         Imagenes.add(nombreImagen);
         ImageFile.add(imageFile);
-        UpdateSpaceListView(nombreImagen);
+        
+            UpdateSpaceListView(nombreImagen);
+        
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     public void UpdateSpaceListView(String Imagen) {
@@ -427,7 +428,11 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
 
             if (!Imagenes.isEmpty()) {
                 for(int i = 0; i < Imagenes.size(); i++) {
-                    da.UploadImagen(Imagenes.get(i), ImageFile.get(i), containerClient);
+
+                    if(da.contadorImagenName(Imagenes.get(i)) == 0){
+                    UploadImagen(Imagenes.get(i), ImageFile.get(i));
+                    }
+
                 }
                 
                 for(String imagen: Imagenes) {
