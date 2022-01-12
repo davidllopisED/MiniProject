@@ -159,7 +159,7 @@ public class DataAccess {
     return users;
     }
     
-    public ArrayList<Pictures> getImages(Spaces espacio) throws MalformedURLException {
+    public ArrayList<Pictures> getImages(int espacio_id) throws MalformedURLException {
     ArrayList<Pictures> pictures = new ArrayList<>();
         try (Connection connection = getConnection()){
             PreparedStatement selectStatement = 
@@ -167,7 +167,7 @@ public class DataAccess {
                             "SELECT id_imatge, Name FROM dbo.imatges join dbo.espai_imatge on (dbo.espai_imatge.fk_id_imatge = dbo.imatges.id_imatge) WHERE fk_registre = ?;"
                     );
             
-            selectStatement.setInt(1, espacio.getFk_id_registre());
+            selectStatement.setInt(1, espacio_id);
             ResultSet resultSet = selectStatement.executeQuery();
                 while (resultSet.next()) {
                     String Name = resultSet.getString("Name");
@@ -181,6 +181,48 @@ public class DataAccess {
             System.out.println("Esta vacio");
         }
         return pictures;
+    }
+    
+    public int contadorImagen(int imagenId) {
+        int count = 0;
+        try (Connection connection = getConnection()){
+            PreparedStatement selectStatement = 
+                    connection.prepareStatement(
+                            "SELECT count(fk_id_imatge) as 'Number' from dbo.espai_imatge WHERE fk_id_imatge = ?;"
+                    );
+            
+            selectStatement.setInt(1, imagenId);
+            ResultSet resultSet = selectStatement.executeQuery();
+                while (resultSet.next()) {
+                     count = resultSet.getInt("Number");
+                return count;
+            } 
+        } catch (SQLException ex) { 
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Esta vacio");
+        }
+        return 0;
+    }
+    
+     public int contadorImagenName(String imagenName) {
+        int count = 0;
+        try (Connection connection = getConnection()){
+            PreparedStatement selectStatement = 
+                    connection.prepareStatement(
+                            "SELECT count(Name) as 'Number' from dbo.imatges WHERE Name = ?;"
+                    );
+            
+            selectStatement.setString(1, imagenName);
+            ResultSet resultSet = selectStatement.executeQuery();
+                while (resultSet.next()) {
+                     count = resultSet.getInt("Number");
+                return count;
+            } 
+        } catch (SQLException ex) { 
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Esta vacio");
+        }
+        return 0;
     }
     
     public int insertImage(Pictures newPicture) {
@@ -374,6 +416,25 @@ public class DataAccess {
         return 0;
     }
     
+    public int deleteImagen(int image_id) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement insertStatement = connection.prepareStatement(
+            "DELETE FROM dbo.imatges WHERE id_imatge = ?;"
+            );
+
+            insertStatement.setInt(1, image_id);
+
+            int result = insertStatement.executeUpdate();
+
+            if(result == 0) {
+                System.out.println("No se ha eliminado nada");
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
 
     public int deleteSpace(Integer registre) {
 
@@ -415,14 +476,15 @@ public class DataAccess {
         return 0;
     }
     
-    public int deleteRelation(int registre) {
+    public int deleteRelation(int space_registre, int image_registre) {
 
         try (Connection connection = getConnection()) {
             PreparedStatement insertStatement = connection.prepareStatement(
-            "DELETE FROM dbo.espai_imatge WHERE fk_registre = ?;"
+            "DELETE FROM dbo.espai_imatge WHERE fk_registre = ? AND fk_id_imatge = ?;"
             );
 
-            insertStatement.setInt(1, registre);
+            insertStatement.setInt(1, space_registre);
+            insertStatement.setInt(2, image_registre);
 
             int result = insertStatement.executeUpdate();
 
