@@ -357,19 +357,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnOpenActionPerformed
 
-    private void UploadImagen(String imageName, File fileImagen) throws IOException {
-        BlobClient blobClient = containerClient.getBlobClient(imageName);
-        BufferedImage bufferedImage = ImageIO.read(fileImagen);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(bufferedImage, "jpg", baos);
-                ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-                blobClient.upload(bais, baos.size());  // Thread blocking
-                BlobHttpHeaders headers = new BlobHttpHeaders();
-                headers.setContentType("image/jpeg");
-                blobClient.setHttpHeaders(headers);
-                baos.close();
-                bais.close();
-    }
+    
     
     private void txtImagenNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImagenNameFocusGained
         // TODO add your handling code here:
@@ -440,9 +428,11 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
 
             if (!Imagenes.isEmpty()) {
                 for(int i = 0; i < Imagenes.size(); i++) {
+
                     if(da.contadorImagenName(Imagenes.get(i)) == 0){
                     UploadImagen(Imagenes.get(i), ImageFile.get(i));
                     }
+
                 }
                 
                 for(String imagen: Imagenes) {

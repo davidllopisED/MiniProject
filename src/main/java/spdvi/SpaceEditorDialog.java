@@ -27,8 +27,10 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Properties;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -40,10 +42,14 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
     Spaces actualSpace;
     private Thread downloadThread;
     SpaceFrame spaceFrame;
-    
+    JFileChooser fileChooser = new JFileChooser();
+    File imageFile;
+    ArrayList<String> Imagenes = new ArrayList<>();
+    ArrayList<File> ImageFile = new ArrayList<>();
     private BlobServiceClient blobServiceClient;
     private BlobContainerClient containerClient;
     Properties properties = new Properties();
+    DefaultComboBoxModel<String> spacesComboBoxModel = new DefaultComboBoxModel<String>();
     //Create a unique name for the container
     /**
      * Creates new form SpaceEditorDialog
@@ -346,7 +352,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenActionPerformed
         // TODO add your handling code here:
-        JFileChooser fileChooser = new JFileChooser();
+        
         /*int returnOption = fileChooser.showOpenDialog(this);
         if (returnOption == JFileChooser.APPROVE_OPTION){
             BufferedImage bufferedImage;
@@ -364,7 +370,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
         int returnValue = fileChooser.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             BlobClient blobClient = containerClient.getBlobClient(fileChooser.getSelectedFile().getName());
-            txtImagenName.setText(fileChooser.getSelectedFile().getAbsolutePath()); //El nombre lo pone
+            txtImagenName.setText(fileChooser.getSelectedFile().getName()); //El nombre lo pone
             try {
                 BufferedImage bufferedImage = ImageIO.read(fileChooser.getSelectedFile().getAbsoluteFile());
                 BufferedImage bufferedImagePath = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath())); //Pero no lo lee como imagen
@@ -398,6 +404,24 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
 //            downloadImage();
             lblImage.setText("");
             lblImage.setIcon(new ImageIcon(getClass().getResource("/gif/spinner.gif")));
+        }
+        String selectedImagen = lstImages.getSelectedValue();
+       File imagePath;
+        if (selectedImagen != null) {
+            for (int i = 0; i < Imagenes.size() ; i++) {
+            if (Imagenes.get(i).equals(selectedImagen)) {
+                imagePath = ImageFile.get(i);
+                BufferedImage bufferedImage;
+                try {
+                    bufferedImage = ImageIO.read(imagePath);
+                    ImageIcon icon = da.resizeImageIcon(bufferedImage, lblImage.getWidth(), lblImage.getHeight());
+                    lblImage.setIcon(icon);
+                } catch (IOException ex) {
+                    Logger.getLogger(SpaceInsertDialog.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        }               
         }
     }//GEN-LAST:event_lstImagesValueChanged
 
@@ -453,9 +477,15 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
     }
     
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
+        String nombreImagen = fileChooser.getSelectedFile().getName();
+        UpdateSpaceListView(nombreImagen);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    public void UpdateSpaceListView(String Imagen) {
+        spacesComboBoxModel.addElement(Imagen);  
+        lstImages.setModel(spacesComboBoxModel);      
+    }
+    
     private void btnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptActionPerformed
         // TODO add your handling code here:
         //En esta parte se hace el insert de la informacion con respecto a loc campos indicados
@@ -476,8 +506,33 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
                 chbMostrar.isSelected()
         );
         
-        DataAccess da = new DataAccess();
+        
         da.actualizarSpace(newSpace);
+        try {
+
+            if (!Imagenes.isEmpty()) {
+                for(int i = 0; i < Imagenes.size(); i++) {
+                    da.UploadImagen(Imagenes.get(i), ImageFile.get(i), containerClient);
+                }
+                
+                for(String imagen: Imagenes) {
+                    Pictures newPicture = new Pictures(da.newRegistre("imatges"), imagen);
+                    da.insertImage(newPicture);
+                    da.insertRelation(newSpace.getFk_id_registre(), newPicture.getId());
+                }
+                
+            }
+            else {
+                
+                //La imagen default tiene como id 0
+                da.insertRelation(newSpace.getFk_id_registre(), 0);
+
+            }
+        }
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            ex.printStackTrace();
+        }
         spaceFrame.UpdateSpaceListView();
         this.setVisible(false); 
     }//GEN-LAST:event_btnAcceptActionPerformed
@@ -516,6 +571,7 @@ public class SpaceEditorDialog extends javax.swing.JDialog implements Runnable{
     private void UpdateImagenJList(Spaces actualSpace) throws MalformedURLException {
        DefaultComboBoxModel<String> spacesComboBoxModel = new DefaultComboBoxModel<String>();
         for(Pictures p: da.getImages(actualSpace.getFk_id_registre())) {
+
             spacesComboBoxModel.addElement(String.valueOf(p.getName()));
         }
         lstImages.setModel(spacesComboBoxModel); 
