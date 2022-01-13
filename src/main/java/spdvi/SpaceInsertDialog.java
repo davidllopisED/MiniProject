@@ -430,7 +430,7 @@ public class SpaceInsertDialog extends javax.swing.JDialog {
                 for(int i = 0; i < Imagenes.size(); i++) {
 
                     if(da.contadorImagenName(Imagenes.get(i)) == 0){
-                    UploadImagen(Imagenes.get(i), ImageFile.get(i));
+                    da.UploadImagen(Imagenes.get(i), ImageFile.get(i), containerClient);
                     }
 
                 }
